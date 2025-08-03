@@ -18,8 +18,6 @@ final class FrankenPHPTest extends TestCase
     {
         parent::setUp();
 
-        ob_start();
-
         HTTPFunctions::reset();
 
         // clear 'MAX_REQUESTS' environment variable
@@ -28,10 +26,6 @@ final class FrankenPHPTest extends TestCase
 
     protected function tearDown(): void
     {
-        if (ob_get_level() > 1) {
-            ob_end_clean();
-        }
-
         parent::tearDown();
 
         HTTPFunctions::reset();
