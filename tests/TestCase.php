@@ -33,7 +33,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *   vendorPath?: string
      * } $config
      */
-    protected function statelessApplication($config = []): StatelessApplication
+    protected function statelessApplication(array $config = []): StatelessApplication
     {
         return new StatelessApplication(
             ArrayHelper::merge(
