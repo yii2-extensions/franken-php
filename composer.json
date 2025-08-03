@@ -1,34 +1,47 @@
 {
-    "name": "yii2/template",
+    "name": "yii2-extensions/franken-php",
     "type": "library",
-    "description": "_____",
+    "description": "Yii2 FrankenPHP runtime.",
     "keywords": [
-        "_____"
+        "yii2-extension",
+        "Franken-php",
+        "runtime"
     ],
     "license": "BSD-3-Clause",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": ">=8.1",
-        "yiisoft/yii2": "^2.2"
+        "yii2-extensions/psr-bridge": "^0.1@dev"
     },
     "require-dev": {
+        "httpsoft/http-message": "^1.1",
+        "infection/infection": "^0.27|^0.30",
         "maglnet/composer-require-checker": "^4.1",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan-strict-rules": "^2.0.3",
         "phpunit/phpunit": "^10.5",
         "rector/rector": "^2.1",
         "symplify/easy-coding-standard": "^12.5",
+        "xepozz/internal-mocker": "^1.4",
         "yii2-extensions/phpstan": "^0.3"
     },
     "autoload": {
         "psr-4": {
-            "yii\\template\\": "src"
+            "yii2\\extensions\\frankenphp\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "yii\\template\\tests\\": "tests"
+            "yii2\\extensions\\frankenphp\\tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "infection/extension-installer": true,
+            "phpstan/extension-installer": true,
+            "yiisoft/yii2-composer": true
         }
     },
     "extra": {
@@ -36,12 +49,12 @@
             "dev-main": "1.0.x-dev"
         }
     },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "phpstan/extension-installer": true,
-            "yiisoft/yii2-composer": true
-        }
+    "provide": {
+        "bower-asset/inputmask": "5.0.9",
+        "bower-asset/jquery": "3.6.1",
+        "bower-asset/punycode": "^1.4",
+        "bower-asset/yii2-pjax": "~2.0.1",
+        "bower-asset/bootstrap": "^5.2"
     },
     "scripts": {
         "check-dependencies": "./vendor/bin/composer-require-checker check",
@@ -49,11 +62,5 @@
         "rector": "./vendor/bin/rector process src",
         "static": "./vendor/bin/phpstan --memory-limit=512M",
         "tests": "./vendor/bin/phpunit"
-    },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        }
-    ]
+    }
 }
