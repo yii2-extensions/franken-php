@@ -108,11 +108,7 @@ final class HTTPFunctions
             throw self::$exceptionToThrow;
         }
 
-        try {
-            $handler();
-        } catch (Throwable $e) {
-            throw $e;
-        }
+        $handler();
 
         if (self::$consecutiveReturnValues !== []) {
             $returnValue = self::$consecutiveReturnValues[self::$consecutiveCallIndex] ?? true;
@@ -167,6 +163,7 @@ final class HTTPFunctions
         self::$headersSent = false;
         self::$headersSentFile = '';
         self::$headersSentLine = 0;
+        self::$keepRunning = true;
         self::$obLength = 0;
         self::$obLevel = 0;
         self::$shouldThrowException = false;
