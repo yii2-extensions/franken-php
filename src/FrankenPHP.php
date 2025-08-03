@@ -9,8 +9,6 @@ use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
 use yii2\extensions\psrbridge\http\{ServerExitCode, StatelessApplication};
 
-use function frankenphp_handle_request;
-
 /**
  * FrankenPHP worker runtime integration for Yii2 Application.
  *

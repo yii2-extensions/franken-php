@@ -15,14 +15,15 @@
         "yii2-extensions/psr-bridge": "^0.1@dev"
     },
     "require-dev": {
-        "infection/infection": "^0.27|^0.30",
         "httpsoft/http-message": "^1.1",
+        "infection/infection": "^0.27|^0.30",
         "maglnet/composer-require-checker": "^4.1",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan-strict-rules": "^2.0.3",
         "phpunit/phpunit": "^10.5",
         "rector/rector": "^2.1",
         "symplify/easy-coding-standard": "^12.5",
+        "xepozz/internal-mocker": "^1.4",
         "yii2-extensions/phpstan": "^0.3"
     },
     "autoload": {
@@ -32,7 +33,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "yii2\\extensions\\frankenphp\\": "tests"
+            "yii2\\extensions\\frankenphp\\tests\\": "tests"
         }
     },
     "config": {
