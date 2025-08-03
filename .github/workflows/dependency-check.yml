@@ -1,0 +1,22 @@
+on:
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - '.gitignore'
+      - '.gitattributes'
+
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - '.gitignore'
+      - '.gitattributes'
+
+name: Composer require checker
+
+jobs:
+  composer-require-checker:
+    uses: php-forge/actions/.github/workflows/composer-require-checker.yml@main
