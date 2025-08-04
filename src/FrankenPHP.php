@@ -81,7 +81,9 @@ final class FrankenPHP
     public function run(): int
     {
         // prevent worker script termination when a client connection is interrupted
+        // @codeCoverageIgnoreStart
         ignore_user_abort(true);
+        // @codeCoverageIgnoreEnd
 
         $app = $this->app;
         $emitter = $this->emitter;
