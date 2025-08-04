@@ -60,9 +60,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                             ],
                         ],
                         'request' => [
-                            'enableCookieValidation' => false,
-                            'enableCsrfCookie' => false,
-                            'enableCsrfValidation' => false,
+                            'cookieValidationKey' => 'test-franken-php',
                             'parsers' => [
                                 'application/json' => JsonParser::class,
                             ],

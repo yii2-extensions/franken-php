@@ -192,10 +192,8 @@ components.php
 declare(strict_types=1);
 
 use app\usecase\security\Identity;
-use yii2\extensions\localeurls\UrlLanguageManager;
 use yii\helpers\ArrayHelper;
 use yii\i18n\PhpMessageSource;
-use yii\web\User;
 
 /** @phpstan-var array<string,mixed> $commonComponents */
 $commonComponents = require dirname(__DIR__) . '/common/components.php';
@@ -216,28 +214,14 @@ $config = [
             ],
         ],
     ],
+    'request' => [
+        'cookieValidationKey' => 'test-franken-php',
+    ],
     'urlManager' => [
-        'class' => UrlLanguageManager::class,
-        'languages' => [
-            'de' => 'de-DE',
-            'en' => 'en-US',
-            'es' => 'es-ES',
-            'fr' => 'fr-FR',
-            'pt' => 'pt-BR',
-            'ru' => 'ru-RU',
-            'zh' => 'zh-CN',
-        ],
-        'enableDefaultLanguageUrlCode' => false,
-        'enableLanguageDetection' => false,
-        'enableLanguagePersistence' => false,
         'enablePrettyUrl' => true,
-        'keepUppercaseLanguageCode' => false,
-        'languageCookieDuration' => 1800,
-        'languageSessionKey' => false,
         'showScriptName' => false,
     ],
     'user' => [
-        'class' => User::class,
         'identityClass' => Identity::class,
     ],
 ];
