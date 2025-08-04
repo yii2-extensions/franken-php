@@ -9,6 +9,8 @@ use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
 use yii2\extensions\psrbridge\http\{ServerExitCode, StatelessApplication};
 
+use function is_numeric;
+
 /**
  * FrankenPHP worker runtime integration for Yii2 Application.
  *
@@ -30,6 +32,11 @@ use yii2\extensions\psrbridge\http\{ServerExitCode, StatelessApplication};
 final class FrankenPHP
 {
     /**
+     * Default maximum number of requests to handle before stopping the worker loop.
+     */
+    public const DEFAULT_MAX_REQUESTS = 1000;
+
+    /**
      * Emitter for PSR-7 responses to the SAPI.
      */
     private SapiEmitter $emitter;
@@ -43,11 +50,15 @@ final class FrankenPHP
      * Creates a new instance of the {@see FrankenPHP} class.
      *
      * @param StatelessApplication $app Stateless Application instance.
+     * @param int|null $maxRequests Maximum number of requests to handle before stopping. If `null`, will try to read
+     * from `MAX_REQUESTS` env var, otherwise defaults to `1000`.
      *
      * @throws Throwable if the emitter or server request creator cannot be instantiated.
      */
-    public function __construct(private readonly StatelessApplication $app)
-    {
+    public function __construct(
+        private readonly StatelessApplication $app,
+        private readonly int|null $maxRequests = null,
+    ) {
         $container = $this->app->container();
 
         $this->emitter = $container->get(SapiEmitter::class);
@@ -82,9 +93,7 @@ final class FrankenPHP
             }
         };
 
-        $maxRequests = (isset($_ENV['MAX_REQUESTS']) && is_numeric($_ENV['MAX_REQUESTS']))
-            ? $_ENV['MAX_REQUESTS']
-            : 1000;
+        $maxRequests = $this->resolveMaxRequests();
 
         $requestCount = 0;
 
@@ -101,5 +110,29 @@ final class FrankenPHP
                 return ServerExitCode::REQUEST_LIMIT->value;
             }
         }
+    }
+
+    /**
+     * Resolves the maximum number of requests to handle before stopping the worker loop.
+     *
+     * Determines the request limit by checking the constructor argument, the 'MAX_REQUESTS' environment variable, or
+     * falling back to the default value if neither is set.
+     *
+     * This method ensures that the worker loop operates with a configurable request limit, supporting both explicit
+     * configuration and environment-based overrides for flexible deployment scenarios.
+     *
+     * @return int Maximum number of requests to process before stopping the worker loop.
+     */
+    private function resolveMaxRequests(): int
+    {
+        if ($this->maxRequests !== null) {
+            return $this->maxRequests;
+        }
+
+        if (isset($_ENV['MAX_REQUESTS']) && is_numeric($_ENV['MAX_REQUESTS'])) {
+            return (int) $_ENV['MAX_REQUESTS'];
+        }
+
+        return self::DEFAULT_MAX_REQUESTS;
     }
 }

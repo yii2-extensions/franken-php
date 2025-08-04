@@ -11,6 +11,11 @@ use yii2\extensions\frankenphp\tests\support\stub\HTTPFunctions;
 use yii2\extensions\psrbridge\exception\HeadersAlreadySentException;
 use yii2\extensions\psrbridge\http\ServerExitCode;
 
+use function array_fill;
+use function sprintf;
+
+use const PHP_INT_MAX;
+
 #[Group('frankenphp')]
 final class FrankenPHPTest extends TestCase
 {
@@ -34,9 +39,13 @@ final class FrankenPHPTest extends TestCase
         unset($_ENV['MAX_REQUESTS']);
     }
 
-    public function testRunMethodDoesNotStopAt999Requests(): void
+    public function testConstructorMaxRequestsOverridesEnvironmentAndDefault(): void
     {
-        $returnValues = array_fill(0, 1000, true);
+        $_ENV['MAX_REQUESTS'] = '999';
+
+        $customMaxRequests = 5;
+
+        $returnValues = array_fill(0, $customMaxRequests, true);
 
         HTTPFunctions::setConsecutiveReturnValues($returnValues);
 
@@ -44,17 +53,20 @@ final class FrankenPHPTest extends TestCase
 
         $app->setMemoryLimit(PHP_INT_MAX);
 
-        $frankenPHP = new FrankenPHP($app);
+        $frankenPHP = new FrankenPHP($app, $customMaxRequests);
 
         self::assertSame(
             ServerExitCode::REQUEST_LIMIT->value,
             $frankenPHP->run(),
-            "FrankenPHP should not stop at '999' requests.",
+            'Constructor parameter should override environment variable and default.',
         );
         self::assertSame(
-            1000,
+            $customMaxRequests,
             HTTPFunctions::getHandleRequestCallCount(),
-            "Should process full '1000' requests, not stop at '999'.",
+            sprintf(
+                "Should process exactly '%d' requests when set via constructor.",
+                $customMaxRequests,
+            ),
         );
     }
 
@@ -110,7 +122,9 @@ final class FrankenPHPTest extends TestCase
     {
         $_ENV['MAX_REQUESTS'] = 'not-a-number';
 
-        $returnValues = array_fill(0, 1000, true);
+        $defaultMaxRequests = FrankenPHP::DEFAULT_MAX_REQUESTS;
+
+        $returnValues = array_fill(0, $defaultMaxRequests, true);
 
         HTTPFunctions::setConsecutiveReturnValues($returnValues);
 
@@ -126,9 +140,45 @@ final class FrankenPHPTest extends TestCase
             "FrankenPHP should ignore non-numeric 'MAX_REQUESTS' and use default.",
         );
         self::assertSame(
-            1000,
+            $defaultMaxRequests,
             HTTPFunctions::getHandleRequestCallCount(),
-            "Should use default '1000' when 'MAX_REQUESTS' is not numeric.",
+            sprintf(
+                "Should use default '%d' when 'MAX_REQUESTS' is not numeric.",
+                $defaultMaxRequests,
+            ),
+        );
+    }
+
+    public function testRunMethodProcessesFullDefaultMaxRequests(): void
+    {
+        $defaultMaxRequests = FrankenPHP::DEFAULT_MAX_REQUESTS;
+
+        $returnValues = array_fill(0, $defaultMaxRequests, true);
+
+        HTTPFunctions::setConsecutiveReturnValues($returnValues);
+
+        $app = $this->statelessApplication();
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        self::assertSame(
+            ServerExitCode::REQUEST_LIMIT->value,
+            $frankenPHP->run(),
+            sprintf(
+                "FrankenPHP should not stop at '%d' requests.",
+                $defaultMaxRequests - 1,
+            ),
+        );
+        self::assertSame(
+            $defaultMaxRequests,
+            HTTPFunctions::getHandleRequestCallCount(),
+            sprintf(
+                "Should process full '%d' requests, not stop at '%d'.",
+                $defaultMaxRequests,
+                $defaultMaxRequests - 1,
+            ),
         );
     }
 
@@ -152,7 +202,7 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             1,
             HTTPFunctions::getHandleRequestCallCount(),
-            'frankenphp_handle_request should be called exactly once before cleanup.',
+            "'frankenphp_handle_request' should be called exactly once before cleanup.",
         );
     }
 
@@ -170,12 +220,12 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             ServerExitCode::REQUEST_LIMIT->value,
             $frankenPHP->run(),
-            "FrankenPHP 'run()' method should return 'ServerExitCode::REQUEST_LIMIT' when keepRunning is false.",
+            "FrankenPHP 'run()' method should return 'ServerExitCode::REQUEST_LIMIT' when keepRunning is 'false'.",
         );
         self::assertSame(
             1,
             HTTPFunctions::getHandleRequestCallCount(),
-            'frankenphp_handle_request should be called exactly once before stopping.',
+            "'frankenphp_handle_request' should be called exactly once before stopping.",
         );
     }
 
@@ -201,13 +251,15 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             2,
             HTTPFunctions::getHandleRequestCallCount(),
-            'frankenphp_handle_request should be called exactly 2 times before reaching limit.',
+            "'frankenphp_handle_request' should be called exactly '2' times before reaching limit.",
         );
     }
 
-    public function testRunMethodUsesDefaultMaxRequests1000(): void
+    public function testRunMethodUsesDefaultMaxRequests(): void
     {
-        $returnValues = array_fill(0, 1000, true);
+        $defaultMaxRequests = FrankenPHP::DEFAULT_MAX_REQUESTS;
+
+        $returnValues = array_fill(0, $defaultMaxRequests, true);
 
         HTTPFunctions::setConsecutiveReturnValues($returnValues);
 
@@ -220,12 +272,18 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             ServerExitCode::REQUEST_LIMIT->value,
             $frankenPHP->run(),
-            "FrankenPHP should use default 'MAX_REQUESTS' of exactly '1000'.",
+            sprintf(
+                "FrankenPHP should use default 'MAX_REQUESTS' of exactly '%d'.",
+                $defaultMaxRequests,
+            ),
         );
         self::assertSame(
-            1000,
+            $defaultMaxRequests,
             HTTPFunctions::getHandleRequestCallCount(),
-            "Should process exactly '1000' requests with default 'MAX_REQUESTS' value.",
+            sprintf(
+                "Should process exactly '%d' requests with default 'MAX_REQUESTS' value.",
+                $defaultMaxRequests,
+            ),
         );
     }
 
@@ -239,6 +297,7 @@ final class FrankenPHPTest extends TestCase
         $_SERVER['HTTP_HOST'] = 'localhost';
 
         $app = $this->statelessApplication();
+
         $app->setMemoryLimit(PHP_INT_MAX);
 
         $frankenPHP = new FrankenPHP($app);
