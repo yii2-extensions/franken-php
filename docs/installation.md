@@ -69,9 +69,9 @@ Organize your project for FrankenPHP:
 your-project/
 ├── public/
 │   └── index.php          # FrankenPHP entry point
+├── .env                   # Environment variables
 ├── Caddyfile              # FrankenPHP configuration
 ├── frankenphp.yaml        # Alternative YAML config (optional)
-├── .env                   # Environment variables
 └── frankenphp             # FrankenPHP binary
 ```
 
