@@ -34,6 +34,104 @@ final class FrankenPHPTest extends TestCase
         unset($_ENV['MAX_REQUESTS']);
     }
 
+    public function testRunMethodDoesNotStopAt999Requests(): void
+    {
+        $returnValues = array_fill(0, 1000, true);
+
+        HTTPFunctions::setConsecutiveReturnValues($returnValues);
+
+        $app = $this->statelessApplication();
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        self::assertSame(
+            ServerExitCode::REQUEST_LIMIT->value,
+            $frankenPHP->run(),
+            "FrankenPHP should not stop at '999' requests.",
+        );
+        self::assertSame(
+            1000,
+            HTTPFunctions::getHandleRequestCallCount(),
+            "Should process full '1000' requests, not stop at '999'.",
+        );
+    }
+
+    public function testRunMethodHandlesStringMaxRequestsCorrectly(): void
+    {
+        $_ENV['MAX_REQUESTS'] = ' 2 ';
+
+        HTTPFunctions::setConsecutiveReturnValues([true, true]);
+
+        $app = $this->statelessApplication();
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        self::assertSame(
+            ServerExitCode::REQUEST_LIMIT->value,
+            $frankenPHP->run(),
+            "FrankenPHP should handle string 'MAX_REQUESTS' correctly with proper casting.",
+        );
+        self::assertSame(
+            2,
+            HTTPFunctions::getHandleRequestCallCount(),
+            "Should process exactly '2' requests when 'MAX_REQUESTS' is string '2'.",
+        );
+    }
+
+    public function testRunMethodHandlesStringMaxRequestsWithLeadingZerosCorrectly(): void
+    {
+        $_ENV['MAX_REQUESTS'] = '001';
+
+        HTTPFunctions::setConsecutiveReturnValues([true]);
+
+        $app = $this->statelessApplication();
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        self::assertSame(
+            ServerExitCode::REQUEST_LIMIT->value,
+            $frankenPHP->run(),
+            "FrankenPHP should process exactly '1' request when 'MAX_REQUESTS' is string '001' with leading zeros.",
+        );
+        self::assertSame(
+            1,
+            HTTPFunctions::getHandleRequestCallCount(),
+            "Should call 'frankenphp_handle_request' exactly once when 'MAX_REQUESTS' is string '001'.",
+        );
+    }
+
+    public function testRunMethodIgnoresNonNumericMaxRequests(): void
+    {
+        $_ENV['MAX_REQUESTS'] = 'not-a-number';
+
+        $returnValues = array_fill(0, 1000, true);
+
+        HTTPFunctions::setConsecutiveReturnValues($returnValues);
+
+        $app = $this->statelessApplication();
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        self::assertSame(
+            ServerExitCode::REQUEST_LIMIT->value,
+            $frankenPHP->run(),
+            "FrankenPHP should ignore non-numeric 'MAX_REQUESTS' and use default.",
+        );
+        self::assertSame(
+            1000,
+            HTTPFunctions::getHandleRequestCallCount(),
+            "Should use default '1000' when 'MAX_REQUESTS' is not numeric.",
+        );
+    }
+
     public function testRunMethodReturnsOkWhenApplicationIsClean(): void
     {
         HTTPFunctions::setConsecutiveReturnValues([true]);
@@ -104,6 +202,30 @@ final class FrankenPHPTest extends TestCase
             2,
             HTTPFunctions::getHandleRequestCallCount(),
             'frankenphp_handle_request should be called exactly 2 times before reaching limit.',
+        );
+    }
+
+    public function testRunMethodUsesDefaultMaxRequests1000(): void
+    {
+        $returnValues = array_fill(0, 1000, true);
+
+        HTTPFunctions::setConsecutiveReturnValues($returnValues);
+
+        $app = $this->statelessApplication();
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        self::assertSame(
+            ServerExitCode::REQUEST_LIMIT->value,
+            $frankenPHP->run(),
+            "FrankenPHP should use default 'MAX_REQUESTS' of exactly '1000'.",
+        );
+        self::assertSame(
+            1000,
+            HTTPFunctions::getHandleRequestCallCount(),
+            "Should process exactly '1000' requests with default 'MAX_REQUESTS' value.",
         );
     }
 

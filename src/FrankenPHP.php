@@ -83,7 +83,7 @@ final class FrankenPHP
         };
 
         $maxRequests = (isset($_ENV['MAX_REQUESTS']) && is_numeric($_ENV['MAX_REQUESTS']))
-            ? (int) $_ENV['MAX_REQUESTS']
+            ? $_ENV['MAX_REQUESTS']
             : 1000;
 
         $requestCount = 0;
@@ -97,7 +97,7 @@ final class FrankenPHP
                 return ServerExitCode::OK->value;
             }
 
-            if ($requestCount >= $maxRequests || !$keepRunning) {
+            if ($requestCount >= $maxRequests || $keepRunning === false) {
                 return ServerExitCode::REQUEST_LIMIT->value;
             }
         }
