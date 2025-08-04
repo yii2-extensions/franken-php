@@ -24,6 +24,7 @@ use Throwable;
  * - Simulation of {@see frankenphp_handle_request} for controlled handler invocation and return value management.
  * - Simulation of {@see headers_sent}, {@see ob_get_length}, {@see ob_get_level} for output buffer and header state
  *   inspection.
+ * - Simulation of {@see ignore_user_abort} for controlled user abort behavior testing.
  * - State reset and configuration for repeatable, isolated test runs.
  * - Tracking of handler calls, handlers, and exception throwing for test scenarios.
  *
@@ -75,6 +76,23 @@ final class HTTPFunctions
      * Tracks the line number where headers were sent.
      */
     private static int $headersSentLine = 0;
+
+    /**
+     * Tracks the number of times ignore_user_abort was called.
+     */
+    private static int $ignoreUserAbortCallCount = 0;
+
+    /**
+     * Tracks the current ignore_user_abort setting.
+     */
+    private static int $ignoreUserAbortSetting = 0;
+
+    /**
+     * Tracks the values passed to ignore_user_abort calls.
+     *
+     * @var array<int, bool|null>
+     */
+    private static array $ignoreUserAbortValues = [];
 
     /**
      * Controls the return value of frankenphp_handle_request.
@@ -135,12 +153,44 @@ final class HTTPFunctions
         return self::$handlers;
     }
 
+    public static function getIgnoreUserAbortCallCount(): int
+    {
+        return self::$ignoreUserAbortCallCount;
+    }
+
+    public static function getIgnoreUserAbortSetting(): int
+    {
+        return self::$ignoreUserAbortSetting;
+    }
+
+    /**
+     * Returns the values passed to ignore_user_abort calls.
+     *
+     * @return array<int, bool|null>
+     */
+    public static function getIgnoreUserAbortValues(): array
+    {
+        return self::$ignoreUserAbortValues;
+    }
+
     public static function headers_sent(mixed &$file = null, mixed &$line = null): bool
     {
         $file = self::$headersSentFile;
         $line = self::$headersSentLine;
 
         return self::$headersSent;
+    }
+
+    public static function ignore_user_abort(bool|null $value = null): int
+    {
+        self::$ignoreUserAbortCallCount++;
+        self::$ignoreUserAbortValues[] = $value;
+
+        if ($value !== null) {
+            self::$ignoreUserAbortSetting = $value ? 1 : 0;
+        }
+
+        return self::$ignoreUserAbortSetting;
     }
 
     public static function ob_get_length(): int|false
@@ -163,6 +213,9 @@ final class HTTPFunctions
         self::$headersSent = false;
         self::$headersSentFile = '';
         self::$headersSentLine = 0;
+        self::$ignoreUserAbortCallCount = 0;
+        self::$ignoreUserAbortSetting = 0;
+        self::$ignoreUserAbortValues = [];
         self::$keepRunning = true;
         self::$obLength = 0;
         self::$obLevel = 0;
@@ -183,6 +236,11 @@ final class HTTPFunctions
     {
         self::$consecutiveReturnValues = $values;
         self::$consecutiveCallIndex = 0;
+    }
+
+    public static function setIgnoreUserAbortSetting(int $setting): void
+    {
+        self::$ignoreUserAbortSetting = $setting;
     }
 
     public static function setKeepRunning(bool $keepRunning): void

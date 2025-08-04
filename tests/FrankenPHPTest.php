@@ -70,6 +70,94 @@ final class FrankenPHPTest extends TestCase
         );
     }
 
+    public function testIgnoreUserAbortIsCalledOnceEvenWithMultipleRequests(): void
+    {
+        $maxRequests = 3;
+
+        $returnValues = array_fill(0, $maxRequests, true);
+
+        HTTPFunctions::setConsecutiveReturnValues($returnValues);
+
+        $app = $this->statelessApplication();
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        $frankenPHP = new FrankenPHP($app, $maxRequests);
+
+        $frankenPHP->run();
+
+        self::assertSame(
+            1,
+            HTTPFunctions::getIgnoreUserAbortCallCount(),
+            "'ignore_user_abort' should be called exactly once, regardless of number of requests processed.",
+        );
+        self::assertSame(
+            $maxRequests,
+            HTTPFunctions::getHandleRequestCallCount(),
+            sprintf("Should process exactly '%d' requests.", $maxRequests),
+        );
+    }
+
+    public function testIgnoreUserAbortIsCalledOnRun(): void
+    {
+        HTTPFunctions::setConsecutiveReturnValues([true]);
+
+        $app = $this->statelessApplication();
+
+        // set a very low memory limit to force 'clean()' to return 'true'
+        $app->setMemoryLimit(1);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        $frankenPHP->run();
+
+        self::assertSame(
+            1,
+            HTTPFunctions::getIgnoreUserAbortCallCount(),
+            "'ignore_user_abort' should be called exactly once during 'run()'.",
+        );
+
+        $ignoreUserAbortValues = HTTPFunctions::getIgnoreUserAbortValues();
+
+        self::assertCount(
+            1,
+            $ignoreUserAbortValues,
+            "Should have exactly one 'ignore_user_abort' call.",
+        );
+        self::assertTrue(
+            $ignoreUserAbortValues[0] ?? false,
+            "'ignore_user_abort' should be called with 'true' to prevent worker script termination.",
+        );
+    }
+
+    public function testIgnoreUserAbortSettingIsEnabled(): void
+    {
+        HTTPFunctions::setConsecutiveReturnValues([true]);
+
+        $app = $this->statelessApplication();
+
+        // set a very low memory limit to force 'clean()' to return 'true'
+        $app->setMemoryLimit(1);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        // initially, 'ignore_user_abort' should be disabled ('0')
+        self::assertSame(
+            0,
+            HTTPFunctions::getIgnoreUserAbortSetting(),
+            "'ignore_user_abort' should initially be disabled.",
+        );
+
+        $frankenPHP->run();
+
+        // after 'run()', 'ignore_user_abort' should be enabled ('1')
+        self::assertSame(
+            1,
+            HTTPFunctions::getIgnoreUserAbortSetting(),
+            "'ignore_user_abort' should be enabled after calling 'run()'.",
+        );
+    }
+
     public function testRunMethodHandlesStringMaxRequestsCorrectly(): void
     {
         $_ENV['MAX_REQUESTS'] = ' 2 ';

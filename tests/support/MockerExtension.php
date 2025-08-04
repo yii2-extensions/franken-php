@@ -59,6 +59,11 @@ final class MockerExtension implements Extension
                 'name' => 'frankenphp_handle_request',
                 'function' => static fn(Closure $handler): bool => HTTPFunctions::frankenphp_handle_request($handler),
             ],
+            [
+                'namespace' => 'yii2\extensions\frankenphp',
+                'name' => 'ignore_user_abort',
+                'function' => static fn(bool|null $value = null): int => HTTPFunctions::ignore_user_abort($value),
+            ],
         ];
 
         $mocker = new Mocker();
