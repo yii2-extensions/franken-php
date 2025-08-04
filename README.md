@@ -85,9 +85,9 @@ Create `Caddyfile` in your project root.
     auto_https off
     admin localhost:2019
 
-	frankenphp {
-		worker ./index.php
-	}
+    frankenphp {
+        worker ./index.php
+    }
 }
 
 localhost {
