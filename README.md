@@ -115,10 +115,10 @@ docker run -v .:/app/public \
 
 ```bash
 # start the server
-./franken-php run
+./frankenphp run
 
 # or with worker mode for production
-./franken-php run --worker public/index.php
+./frankenphp run --worker public/index.php
 ```
 
 Your application will be available at `https://localhost` (HTTPS by default) and you can access it via HTTP/2 or HTTP/3.
