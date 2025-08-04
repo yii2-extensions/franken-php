@@ -60,8 +60,8 @@ Create your FrankenPHP entry point (`public/index.php`):
 
 declare(strict_types=1);
 
+use yii2\extensions\frankenphp\FrankenPHP;
 use yii2\extensions\psrbridge\http\StatelessApplication;
-use yii2\extensions\franken-php\FrankenPHP;
 
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'dev');
