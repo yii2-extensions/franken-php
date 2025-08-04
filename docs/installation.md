@@ -36,6 +36,46 @@ Then run.
 composer update
 ```
 
+### FrankenPHP configuration
+
+Create `Caddyfile` in your project root.
+
+```caddyfile
+{
+    auto_https off
+    admin localhost:2019
+
+	frankenphp {
+		worker ./index.php
+	}
+}
+
+localhost {
+	log
+
+	encode zstd br gzip
+
+	root public/
+
+	request_header X-Sendfile-Type x-accel-redirect
+	request_header X-Accel-Mapping ../private-files=/private-files
+	intercept {
+		@sendfile header X-Accel-Redirect *
+		handle_response @sendfile {
+			root private-files/
+			rewrite * {resp.header.X-Accel-Redirect}
+			method * GET
+			header -X-Accel-Redirect
+			file_server
+		}
+	}
+
+	php_server {
+		try_files {path} index.php
+	}
+}
+```
+
 ### Install FrankenPHP binary
 
 We provide static FrankenPHP binaries for Linux and macOS containing [PHP 8.4](https://www.php.net/releases/8.4/en.php) 

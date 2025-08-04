@@ -76,6 +76,46 @@ $runner = new FrankenPHP(new StatelessApplication($config));
 $runner->run();
 ```
 
+### FrankenPHP configuration
+
+Create `Caddyfile` in your project root.
+
+```caddyfile
+{
+    auto_https off
+    admin localhost:2019
+
+	frankenphp {
+		worker ./index.php
+	}
+}
+
+localhost {
+	log
+
+	encode zstd br gzip
+
+	root public/
+
+	request_header X-Sendfile-Type x-accel-redirect
+	request_header X-Accel-Mapping ../private-files=/private-files
+	intercept {
+		@sendfile header X-Accel-Redirect *
+		handle_response @sendfile {
+			root private-files/
+			rewrite * {resp.header.X-Accel-Redirect}
+			method * GET
+			header -X-Accel-Redirect
+			file_server
+		}
+	}
+
+	php_server {
+		try_files {path} index.php
+	}
+}
+```
+
 ### Standalone Binary
 
 We provide static FrankenPHP binaries for Linux and macOS containing [PHP 8.4](https://www.php.net/releases/8.4/en.php) 
@@ -105,10 +145,22 @@ frankenphp php-cli /path/to/your/script.php
 
 Alternatively, [Docker images](https://frankenphp.dev/docs/docker/) are available:
 
+Clasic mode.
 ```console
 docker run -v .:/app/public \
     -p 80:80 -p 443:443 -p 443:443/udp \
     dunglas/frankenphp
+```
+
+Worker mode.
+```console
+docker run -e FRANKENPHP_CONFIG="worker ./public/index.php" \ 
+    -v $PWD/Caddyfile:/etc/caddy/Caddyfile \
+    -v $PWD:/app \
+    -p 80:80 \
+    -p 443:443/tcp \
+    -p 443:443/udp \
+    --name yii2-frankenphp-rfc dunglas/frankenphp
 ```
 
 ### Start the server
