@@ -215,11 +215,6 @@ $config = [
             ],
         ],
     ],
-    'request' => [
-        'enableCookieValidation' => false,
-        'enableCsrfValidation' => false,
-        'enableCsrfCookie' => false,
-    ],
     'urlManager' => [
         'class' => UrlLanguageManager::class,
         'languages' => [
