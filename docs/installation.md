@@ -51,28 +51,29 @@ Create `Caddyfile` in your project root.
 }
 
 localhost {
-	log
+    log
 
-	encode zstd br gzip
+    encode zstd br gzip
 
-	root public/
+    root public/
 
-	request_header X-Sendfile-Type x-accel-redirect
-	request_header X-Accel-Mapping ../private-files=/private-files
-	intercept {
-		@sendfile header X-Accel-Redirect *
-		handle_response @sendfile {
-			root private-files/
-			rewrite * {resp.header.X-Accel-Redirect}
-			method * GET
-			header -X-Accel-Redirect
-			file_server
-		}
-	}
+    request_header X-Sendfile-Type x-accel-redirect
+    request_header X-Accel-Mapping ../private-files=/private-files
 
-	php_server {
-		try_files {path} index.php
-	}
+    intercept {
+        @sendfile header X-Accel-Redirect *
+        handle_response @sendfile {
+            root private-files/
+            rewrite * {resp.header.X-Accel-Redirect}
+            method * GET
+            header -X-Accel-Redirect
+            file_server
+        }
+    }
+
+    php_server {
+        try_files {path} index.php
+    }
 }
 ```
 
