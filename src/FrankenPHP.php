@@ -80,6 +80,9 @@ final class FrankenPHP
      */
     public function run(): int
     {
+        // prevent worker script termination when a client connection is interrupted
+        ignore_user_abort(true);
+
         $app = $this->app;
         $emitter = $this->emitter;
         $serverRequestCreator = $this->serverRequestCreator;
