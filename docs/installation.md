@@ -63,7 +63,7 @@ frankenphp php-cli /path/to/your/script.php
 
 ## Project structure
 
-Organize your project for RoadRunner:
+Organize your project for FrankenPHP:
 
 ```text
 your-project/
