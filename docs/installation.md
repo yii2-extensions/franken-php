@@ -2,7 +2,7 @@
 
 ## System requirements
 
-- [`PHP`](https://www.php.net/downloads) 8.2 or higher.
+- [`PHP`](https://www.php.net/downloads) 8.1 or higher.
 - [`Composer`](https://getcomposer.org/download/) for dependency management.
 - [`FrankenPHP`](https://github.com/dunglas/frankenphp) 1.2.0 or higher.
 - [`OpenSSL`](https://www.openssl.org/) for HTTPS support.
