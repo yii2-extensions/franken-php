@@ -97,7 +97,7 @@ final class FrankenPHP
                 return ServerExitCode::OK->value;
             }
 
-            if ($requestCount >= $maxRequests || !$keepRunning) {
+            if ($requestCount >= $maxRequests || $keepRunning === false) {
                 return ServerExitCode::REQUEST_LIMIT->value;
             }
         }

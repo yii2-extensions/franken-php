@@ -82,6 +82,30 @@ final class FrankenPHPTest extends TestCase
         );
     }
 
+    public function testRunMethodHandlesStringMaxRequestsWithLeadingZerosCorrectly(): void
+    {
+        $_ENV['MAX_REQUESTS'] = '001';
+
+        HTTPFunctions::setConsecutiveReturnValues([true]);
+
+        $app = $this->statelessApplication();
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        self::assertSame(
+            ServerExitCode::REQUEST_LIMIT->value,
+            $frankenPHP->run(),
+            "FrankenPHP should process exactly '1' request when 'MAX_REQUESTS' is string '001' with leading zeros.",
+        );
+        self::assertSame(
+            1,
+            HTTPFunctions::getHandleRequestCallCount(),
+            "Should call 'frankenphp_handle_request' exactly once when 'MAX_REQUESTS' is string '001'.",
+        );
+    }
+
     public function testRunMethodIgnoresNonNumericMaxRequests(): void
     {
         $_ENV['MAX_REQUESTS'] = 'not-a-number';
