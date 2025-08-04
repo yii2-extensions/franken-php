@@ -78,7 +78,7 @@ $runner->run();
 
 ### FrankenPHP configuration
 
-Create `Caddyfile` in your project root.
+Create `Caddyfile` in your project root (worker mode).
 
 ```caddyfile
 {
