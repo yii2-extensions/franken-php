@@ -49,18 +49,17 @@
             "dev-main": "1.0.x-dev"
         }
     },
-    "provide": {
-        "bower-asset/inputmask": "5.0.9",
-        "bower-asset/jquery": "3.6.1",
-        "bower-asset/punycode": "^1.4",
-        "bower-asset/yii2-pjax": "~2.0.1",
-        "bower-asset/bootstrap": "^5.2"
-    },
     "scripts": {
         "check-dependencies": "./vendor/bin/composer-require-checker check",
         "ecs": "./vendor/bin/ecs --fix",
         "rector": "./vendor/bin/rector process src",
         "static": "./vendor/bin/phpstan --memory-limit=512M",
         "tests": "./vendor/bin/phpunit"
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
 }
