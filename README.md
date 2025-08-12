@@ -68,10 +68,10 @@ defined('YII_DEBUG') or define('YII_DEBUG', false);
 // production default (change to 'dev' for development)
 defined('YII_ENV') or define('YII_ENV', 'prod');
 
-require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/yiisoft/yii2/Yii.php';
 
-$config = require dirname(__DIR__) . '/config/web.php';
+$config = require_once dirname(__DIR__) . '/config/web.php';
 
 $runner = new FrankenPHP(new StatelessApplication($config));
 

@@ -230,7 +230,7 @@ return [
         ],
         'request' => [
             // note: this key is for testing only. Replace with a secure, random string in production!
-            'cookieValidationKey' => 'test_cookie_validation_key_1234567890',
+            'cookieValidationKey' => 'your-cookie-validation-key',
             'enableCsrfValidation' => false,
             // but if you absolutely need it set cookie domain to localhost
             /*
@@ -287,7 +287,8 @@ $config = [
             'basePath' => '@public/assets', // public directory for docker image, if use binary remove this line
         ],    
         'request' => [
-            'cookieValidationKey' => 'test_cookie_validation_key_1234567890',
+            // note: this key is for testing only. Replace with a secure, random string in production!
+            'cookieValidationKey' => 'your-cookie-validation-key',
         ],
         'cache' => [
             'class' => FileCache::class,

@@ -8,6 +8,12 @@
 - [`OpenSSL`](https://www.openssl.org/) for HTTPS support.
 - [`Yii2`](https://github.com/yiisoft/yii2) 2.0.53+ or 22.x.
 
+### PSR-7/PSR-17 HTTP Message Factories
+
+- [`guzzlehttp/psr7`](https://github.com/guzzle/psr7).
+- [`httpsoft/http-message`](https://github.com/httpsoft/http-message)
+- [`nyholm/psr7`](https://github.com/Nyholm/psr7), 
+
 ## Installation
 
 ### Method 1: Using [Composer](https://getcomposer.org/download/) (recommended)
@@ -15,7 +21,7 @@
 Install the extension.
 
 ```bash
-composer require yii2-extensions/frankenphp:^0.1.0@dev
+composer require yii2-extensions/franken-php:^0.1.0@dev
 ```
 
 ### Method 2: Manual installation
@@ -25,7 +31,7 @@ Add to your `composer.json`.
 ```json
 {
     "require": {
-        "yii2-extensions/frankenphp": "^0.1.0@dev"
+        "yii2-extensions/franken-php": "^0.1.0@dev"
     }
 }
 ```
