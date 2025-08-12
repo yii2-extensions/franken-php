@@ -48,13 +48,12 @@ with automatic memory management and real-time capabilities.
 ### Installation
 
 ```bash
-composer require yii2-extensions/franken-php
+composer require yii2-extensions/franken-php:^0.1.0@dev
 ```
 
 ### Basic Usage
 
-Create your FrankenPHP entry point (`public/index.php`):
-
+Create your FrankenPHP entry point (`public/index.php`)
 ```php
 <?php
 
@@ -63,13 +62,16 @@ declare(strict_types=1);
 use yii2\extensions\frankenphp\FrankenPHP;
 use yii2\extensions\psrbridge\http\StatelessApplication;
 
-defined('YII_DEBUG') or define('YII_DEBUG', true);
-defined('YII_ENV') or define('YII_ENV', 'dev');
+// production default (change to 'true' for development)
+defined('YII_DEBUG') or define('YII_DEBUG', false);
 
-require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
+// production default (change to 'dev' for development)
+defined('YII_ENV') or define('YII_ENV', 'prod');
 
-$config = require dirname(__DIR__) . '/config/web/app.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/yiisoft/yii2/Yii.php';
+
+$config = require_once dirname(__DIR__) . '/config/web.php';
 
 $runner = new FrankenPHP(new StatelessApplication($config));
 
@@ -78,8 +80,7 @@ $runner->run();
 
 ### FrankenPHP configuration
 
-Create `Caddyfile` in your project root (worker mode).
-
+Create `Caddyfile` in your project root (worker mode)
 ```caddyfile
 {
     auto_https off
@@ -127,59 +128,75 @@ On Windows, use [WSL](https://learn.microsoft.com/windows/wsl/) to run FrankenPH
 [Download FrankenPHP](https://github.com/php/frankenphp/releases) or copy this line into your terminal to automatically
 install the version appropriate for your platform.
 
-```console
+```bash
 curl https://frankenphp.dev/install.sh | sh
 mv frankenphp /usr/local/bin/
 ```
 
-To serve the content of the current directory, run.
-```console
-frankenphp php-server
-```
+To run your application, you can use the following command.
 
-You can also run command-line scripts with.
-```console
-frankenphp php-cli /path/to/your/script.php
+```bash
+cd web
+./frankenphp php-server --worker index.php
 ```
 
 ### Docker
 
-Alternatively, [Docker images](https://frankenphp.dev/docs/docker/) are available:
+Docker image require `public` directory to be mounted as `/app/public` and the application root directory as `/app`.
 
-Clasic mode.
-```console
-docker run -v .:/app/public \
-    -p 80:80 -p 443:443 -p 443:443/udp \
-    dunglas/frankenphp
+Alternatively, [Docker images](https://frankenphp.dev/docs/docker/) are available.
+
+#### Worker mode
+
+Gitbash/Windows
+```bash
+docker run \
+  -e FRANKENPHP_CONFIG="worker ./public/index.php" \
+  -v "//k/yii2-extensions/basic-frankenphp/Caddyfile:/etc/caddy/Caddyfile" \
+  -v "//k/yii2-extensions/basic-frankenphp:/app" \
+  -v "//k/yii2-extensions/basic-frankenphp/web:/app/public" \
+  -p 80:80 \
+  -p 443:443 \
+  -p 443:443/udp \
+  --name yii2-frankenphp-worker \
+  dunglas/frankenphp:php8.3-alpine
+```
+> **Note:** Paths in the example (`//k/yii2-extensions/basic-frankenphp`) are for demonstration purposes only.  
+> Replace them with the actual path to your Yii2 project on your system.
+
+Linux/WSL
+```bash
+docker run \
+  -e FRANKENPHP_CONFIG="worker ./public/index.php" \
+  -v $PWD/Caddyfile:/etc/caddy/Caddyfile \
+  -v $PWD:/app \
+  -v $PWD/web:/app/public \
+  -p 80:80 \
+  -p 443:443 \
+  -p 443:443/udp \
+  --name yii2-frankenphp-worker \
+  dunglas/frankenphp:php8.3-alpine
 ```
 
-Worker mode.
-```console
-docker run -e FRANKENPHP_CONFIG="worker ./public/index.php" \ 
-    -v $PWD/Caddyfile:/etc/caddy/Caddyfile \
-    -v $PWD:/app \
-    -p 80:80 \
-    -p 443:443/tcp \
-    -p 443:443/udp \
-    --name yii2-frankenphp-rfc dunglas/frankenphp
-```
+#### Extension runkit7
 
-### Start the server
+To use the `runkit7` extension, you need to install it in the Docker container. You can do this by executing the 
+following commands inside the container.
 
 ```bash
-# start the server
-./frankenphp run
-
-# or with worker mode for production
-./frankenphp run --worker public/index.php
+docker exec -it yii2-frankenphp-worker bash
+apk add --no-cache autoconf alpine-sdk php8-dev git
+pecl install runkit7-4.0.0a6
+echo "extension=runkit7.so" > /usr/local/etc/php/conf.d/runkit7.ini
 ```
+> **Note:** `runkit7` extension is required to allow redefining the `YII_BEGIN_TIME` constant on every request in
+> worker mode.
 
 Your application will be available at `https://localhost` (HTTPS by default) and you can access it via HTTP/2 or HTTP/3.
 
 ## Documentation
 
-For detailed configuration options and advanced usage:
-
+For detailed configuration options and advanced usage.
 - 📚 [Installation Guide](docs/installation.md)
 - ⚙️ [Configuration Reference](docs/configuration.md) 
 - 🧪 [Testing Guide](docs/testing.md)

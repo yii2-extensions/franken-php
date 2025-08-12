@@ -8,6 +8,18 @@
 - [`OpenSSL`](https://www.openssl.org/) for HTTPS support.
 - [`Yii2`](https://github.com/yiisoft/yii2) 2.0.53+ or 22.x.
 
+### PSR-7/PSR-17 HTTP Message Factories
+
+- [`guzzlehttp/psr7`](https://github.com/guzzle/psr7)
+- [`httpsoft/http-message`](https://github.com/httpsoft/http-message)
+- [`nyholm/psr7`](https://github.com/Nyholm/psr7)
+
+For example, install HttpSoft (recommended for Yii2 applications).
+
+```bash
+composer require httpsoft/http-message
+```
+
 ## Installation
 
 ### Method 1: Using [Composer](https://getcomposer.org/download/) (recommended)
@@ -15,7 +27,7 @@
 Install the extension.
 
 ```bash
-composer require yii2-extensions/frankenphp:^0.1
+composer require yii2-extensions/franken-php:^0.1.0@dev
 ```
 
 ### Method 2: Manual installation
@@ -25,7 +37,7 @@ Add to your `composer.json`.
 ```json
 {
     "require": {
-        "yii2-extensions/frankenphp": "^0.1"
+        "yii2-extensions/franken-php": "^0.1.0@dev"
     }
 }
 ```
@@ -87,19 +99,16 @@ On Windows, use [WSL](https://learn.microsoft.com/windows/wsl/) to run FrankenPH
 [Download FrankenPHP](https://github.com/php/frankenphp/releases) or copy this line into your terminal to automatically
 install the version appropriate for your platform.
 
-```console
+```bash
 curl https://frankenphp.dev/install.sh | sh
 mv frankenphp /usr/local/bin/
 ```
 
-To serve the content of the current directory, run.
-```console
-frankenphp php-server
-```
+To run your application, you can use the following command.
 
-You can also run command-line scripts with.
-```console
-frankenphp php-cli /path/to/your/script.php
+```bash
+cd web
+./frankenphp php-server --worker index.php
 ```
 
 ## Project structure
@@ -107,10 +116,9 @@ frankenphp php-cli /path/to/your/script.php
 Organize your project for FrankenPHP:
 
 ```text
-your-project/
+app-basic/
 ├── public/
 │   └── index.php          # FrankenPHP entry point
-├── .env                   # Environment variables
 ├── Caddyfile              # FrankenPHP configuration
 ├── frankenphp.yaml        # Alternative YAML config (optional)
 └── frankenphp             # FrankenPHP binary
