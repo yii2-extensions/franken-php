@@ -48,7 +48,7 @@ with automatic memory management and real-time capabilities.
 ### Installation
 
 ```bash
-composer require yii2-extensions/franken-php
+composer require yii2-extensions/franken-php:^0.1.0@dev
 ```
 
 ### Basic Usage
