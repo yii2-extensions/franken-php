@@ -10,8 +10,11 @@
 
 ### PSR-7/PSR-17 HTTP Message Factories
 
+Install exactly one of the following PSR-7/PSR-17 HTTP message implementations.
+
 - [`guzzlehttp/psr7`](https://github.com/guzzle/psr7)
 - [`httpsoft/http-message`](https://github.com/httpsoft/http-message)
+- [`laminas/laminas-diactoros`](https://github.com/laminas/laminas-diactoros)
 - [`nyholm/psr7`](https://github.com/Nyholm/psr7)
 
 For example, install HttpSoft (recommended for Yii2 applications).
