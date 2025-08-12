@@ -161,6 +161,8 @@ docker run \
   --name yii2-frankenphp-worker \
   dunglas/frankenphp:php8.3-alpine
 ```
+> **Note:** Paths in the example above (`//k/yii2-extensions/basic-frankenphp`) are for demonstration purposes only.  
+> Replace them with the actual path to your Yii2 project on your system.
 
 Linux/WSL
 ```bash
