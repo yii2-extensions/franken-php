@@ -27,8 +27,8 @@
     </a>  
 </p>
 
-A blazing-fast FrankenPHP integration for Yii2 applications that provides seamless HTTP/2, HTTP/3, and WebSocket support 
-with automatic memory management and real-time capabilities.
+A blazing-fast FrankenPHP integration for Yii2 applications that provides seamless HTTP/2 and HTTP/3 support, automatic
+memory management, and real-time capabilities.
 
 ## Features
 
