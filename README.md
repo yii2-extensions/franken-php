@@ -32,16 +32,15 @@ with automatic memory management and real-time capabilities.
 
 ## Features
 
-- ✅ **Automatic HTTPS**: Built-in automatic HTTPS with Let's Encrypt integration.
-- ✅ **Early Hints**: HTTP/2 Server Push and Early Hints support for faster loading.
-- ✅ **Graceful Reloading**: Hot reload capabilities without downtime.
+- ✅ **Automatic Memory Management**: Smart cleanup with configurable memory limits.
+- ✅ **Error Handling**: Comprehensive error reporting to FrankenPHP worker.
+- ✅ **Graceful Shutdown**: Automatic worker restart when memory usage is high.
+- ✅ **High Performance**: Utilize FrankenPHP blazing-fast HTTP server for your Yii2 applications.
 - ✅ **HTTP/2 & HTTP/3 Support**: Native support for modern HTTP protocols with multiplexing.
-- ✅ **Memory Efficient**: Smart memory management with configurable limits.
-- ✅ **Production Ready**: Battle-tested with Caddy's proven reliability.
-- ✅ **Real-time Features**: Server-Sent Events (SSE) and WebSocket support.
-- ✅ **WebSocket Integration**: Real-time bidirectional communication capabilities.
-- ✅ **Worker Mode**: Long-running worker processes for maximum performance.
-- ✅ **Zero Configuration**: Works out of the box with sensible defaults.
+- ✅ **Production Ready**: Battle-tested with Caddy proven reliability.
+- ✅ **PSR-7 Compatible**: Full PSR-7 request/response handling through the PSR bridge.
+- ✅ **Stateless Design**: Memory-efficient stateless application lifecycle.
+- ✅ **Zero Configuration**: Works out of the box with minimal setup.
 
 ## Quick start
 
@@ -178,21 +177,33 @@ docker run \
   dunglas/frankenphp:php8.3-alpine
 ```
 
-#### Extension runkit7
+### Development & Debugging
 
-To use the `runkit7` extension, you need to install it in the Docker container. You can do this by executing the 
-following commands inside the container.
+For enhanced debugging capabilities and proper time display in RoadRunner, install the worker debug extension.
 
 ```bash
-docker exec -it yii2-frankenphp-worker bash
-apk add --no-cache autoconf alpine-sdk php8-dev git
-pecl install runkit7-4.0.0a6
-echo "extension=runkit7.so" > /usr/local/etc/php/conf.d/runkit7.ini
+composer require --dev yii2-extensions/worker-debug:^0.1
 ```
-> **Note:** `runkit7` extension is required to allow redefining the `YII_BEGIN_TIME` constant on every request in
-> worker mode.
 
-Your application will be available at `https://localhost` (HTTPS by default) and you can access it via HTTP/2 or HTTP/3.
+Add the following to your development configuration (`config/web.php`):
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use yii2\extensions\debug\WorkerDebugModule;
+
+if (YII_ENV_DEV) {
+    // configuration adjustments for 'dev' environment
+    $config['bootstrap'][] = 'debug';
+    $config['modules']['debug'] = [
+        'class' => WorkerDebugModule::class,
+        // uncomment the following to add your IP if you are not connecting from localhost.
+        //'allowedIPs' => ['127.0.0.1', '::1'],
+    ];
+}
+```
 
 ## Documentation
 

@@ -4,7 +4,7 @@
     "description": "Yii2 FrankenPHP runtime.",
     "keywords": [
         "yii2-extension",
-        "Franken-php",
+        "franken-php",
         "runtime"
     ],
     "license": "BSD-3-Clause",
