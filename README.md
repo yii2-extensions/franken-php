@@ -179,7 +179,7 @@ docker run \
 
 ### Development & Debugging
 
-For enhanced debugging capabilities and proper time display in RoadRunner, install the worker debug extension.
+For enhanced debugging capabilities and proper time display in FrankenPHP, install the worker debug extension.
 
 ```bash
 composer require --dev yii2-extensions/worker-debug:^0.1
