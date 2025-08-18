@@ -19,4 +19,4 @@ name: ecs
 
 jobs:
   easy-coding-standard:
-    uses: php-forge/actions/.github/workflows/ecs.yml@main
+    uses: php-forge/actions/.github/workflows/ecs.yml@v1
