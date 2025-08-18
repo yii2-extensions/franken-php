@@ -35,8 +35,8 @@
 /composer-require-checker.json  export-ignore
 /docs                           export-ignore
 /ecs.php                        export-ignore
-/infection.json5                export-ignore
-/phpstan*.neon                  export-ignore
+/infection.json*                export-ignore
+/phpstan*.neon*                 export-ignore
 /phpunit.xml.dist               export-ignore
 /psalm.xml                      export-ignore
 /rector.php                     export-ignore
