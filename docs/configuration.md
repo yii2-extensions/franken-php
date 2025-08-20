@@ -207,13 +207,9 @@ return [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
-        '@public' => dirname(__DIR__) . '/public', // public directory for docker image, if use binary remove this line
     ],
     'language' => 'en-US',
-    'components' => [
-        'assetManager' => [
-            'basePath' => '@public/assets', // public directory for docker image, if use binary remove this line
-        ],        
+    'components' => [       
         'db' => $db,
         'mailer' => [
             'class' => Mailer::class,
@@ -282,12 +278,8 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
-        '@public' => dirname(__DIR__) . '/public', // public directory for docker image, if use binary remove this line
     ],
-    'components' => [
-        'assetManager' => [
-            'basePath' => '@public/assets', // public directory for docker image, if use binary remove this line
-        ],    
+    'components' => [  
         'request' => [
             // note: this key is for testing only. Replace with a secure, random string in production!
             'cookieValidationKey' => 'your-cookie-validation-key',

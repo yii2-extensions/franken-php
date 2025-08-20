@@ -70,7 +70,7 @@ localhost {
 
     encode zstd br gzip
 
-    root public/
+    root {$SERVER_ROOT:public/}
 
     request_header X-Sendfile-Type x-accel-redirect
     request_header X-Accel-Mapping ../private-files=/private-files
@@ -89,7 +89,7 @@ localhost {
     php_server {
         try_files {path} index.php
     }
-}
+
 ```
 
 ### Install FrankenPHP binary
@@ -120,7 +120,7 @@ Organize your project for FrankenPHP:
 
 ```text
 app-basic/
-├── public/
+├── web/
 │   └── index.php          # FrankenPHP entry point
 ├── Caddyfile              # FrankenPHP configuration
 ├── frankenphp.yaml        # Alternative YAML config (optional)

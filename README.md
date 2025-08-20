@@ -52,7 +52,7 @@ composer require yii2-extensions/franken-php:^0.1.0@dev
 
 ### Basic Usage
 
-Create your FrankenPHP entry point (`public/index.php`)
+Create your FrankenPHP entry point (`web/index.php`)
 ```php
 <?php
 
@@ -98,7 +98,7 @@ localhost {
 
     encode zstd br gzip
 
-    root public/
+    root {$SERVER_ROOT:public/}
 
     request_header X-Sendfile-Type x-accel-redirect
     request_header X-Accel-Mapping ../private-files=/private-files
@@ -144,7 +144,7 @@ cd web
 
 ### Docker
 
-Docker image require `public` directory to be mounted as `/app/public` and the application root directory as `/app`.
+Docker image require `web` directory to be mounted as `/app/web` and the application root directory as `/app`.
 
 Alternatively, [Docker images](https://frankenphp.dev/docs/docker/) are available.
 
@@ -153,15 +153,16 @@ Alternatively, [Docker images](https://frankenphp.dev/docs/docker/) are availabl
 Gitbash/Windows
 ```bash
 docker run \
-  -e FRANKENPHP_CONFIG="worker ./public/index.php" \
+  -e FRANKENPHP_CONFIG="worker ./web/index.php" \
+  -e SERVER_ROOT=./web \
   -v "//k/yii2-extensions/basic-frankenphp/Caddyfile:/etc/caddy/Caddyfile" \
   -v "//k/yii2-extensions/basic-frankenphp:/app" \
-  -v "//k/yii2-extensions/basic-frankenphp/web:/app/public" \
+  -v "//k/yii2-extensions/basic-frankenphp/web:/app/web" \
   -p 80:80 \
   -p 443:443 \
   -p 443:443/udp \
   --name yii2-frankenphp-worker \
-  dunglas/frankenphp:php8.3-alpine
+  dunglas/frankenphp
 ```
 > **Note:** Paths in the example (`//k/yii2-extensions/basic-frankenphp`) are for demonstration purposes only.  
 > Replace them with the actual path to your Yii2 project on your system.
@@ -169,15 +170,16 @@ docker run \
 Linux/WSL
 ```bash
 docker run \
-  -e FRANKENPHP_CONFIG="worker ./public/index.php" \
+  -e FRANKENPHP_CONFIG="worker ./web/index.php" \
+  -e SERVER_ROOT=./web \  
   -v $PWD/Caddyfile:/etc/caddy/Caddyfile \
   -v $PWD:/app \
-  -v $PWD/web:/app/public \
+  -v $PWD/web:/app/web \
   -p 80:80 \
   -p 443:443 \
   -p 443:443/udp \
   --name yii2-frankenphp-worker \
-  dunglas/frankenphp:php8.3-alpine
+  dunglas/frankenphp
 ```
 
 ### Development & Debugging
