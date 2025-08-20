@@ -89,7 +89,7 @@ localhost {
     php_server {
         try_files {path} index.php
     }
-
+}
 ```
 
 ### Install FrankenPHP binary
