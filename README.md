@@ -144,7 +144,7 @@ cd web
 
 ### Docker
 
-Docker image require `web` directory to be mounted as `/app/web` and the application root directory as `/app`.
+Docker images require the `web` directory to be mounted as `/app/web` and the application root directory as `/app`.
 
 Alternatively, [Docker images](https://frankenphp.dev/docs/docker/) are available.
 
