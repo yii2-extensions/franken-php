@@ -70,6 +70,9 @@ defined('YII_ENV') or define('YII_ENV', 'prod');
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 require_once dirname(__DIR__) . '/vendor/yiisoft/yii2/Yii.php';
 
+// disable PHP automatic session cookie handling
+ini_set('session.use_cookies', '0');
+
 $config = require_once dirname(__DIR__) . '/config/web.php';
 
 $runner = new FrankenPHP(new StatelessApplication($config));
