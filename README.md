@@ -210,6 +210,33 @@ if (YII_ENV_DEV) {
 }
 ```
 
+### File Upload Handling
+
+For enhanced file upload support in worker environments, use the PSR-7 bridge UploadedFile class instead of the standard 
+Yii2 implementation.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use yii2\extensions\psrbridge\http\{Response, UploadedFile};
+
+final class FileController extends \yii\web\Controller
+{
+    public function actionUpload(): Response
+    {
+        $file = UploadedFile::getInstanceByName('avatar');
+        
+        if ($file !== null && $file->error === UPLOAD_ERR_OK) {
+            $file->saveAs('@webroot/uploads/' . $file->name);
+        }
+        
+        return $this->asJson(['status' => 'uploaded']);
+    }
+}
+```
+
 ## Documentation
 
 For detailed configuration options and advanced usage.
