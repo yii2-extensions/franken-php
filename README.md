@@ -39,7 +39,7 @@ memory management, and real-time capabilities.
 - ✅ **Stateless Design**: Memory-efficient stateless application lifecycle.
 - ✅ **Zero Configuration**: Works out of the box with minimal setup.
 
-### Installation
+## Installation
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/yii2-extensions/franken-php.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Stable)](https://packagist.org/packages/yii2-extensions/franken-php)
 [![Total Downloads](https://img.shields.io/packagist/dt/yii2-extensions/franken-php.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Downloads)](https://packagist.org/packages/yii2-extensions/franken-php)
