@@ -7,6 +7,9 @@
 </p>
 
 <p align="center">
+    <a href="https://packagist.org/packages/yii2-extensions/franken-php" target="_blank">
+        <img src="https://img.shields.io/badge/Status-Dev-orange.svg?style=for-the-badge&logo=packagist&logoColor=white" alt="Development Status">
+    </a>
     <a href="https://www.php.net/releases/8.1/en.php" target="_blank">
         <img src="https://img.shields.io/badge/%3E%3D8.1-777BB4.svg?style=for-the-badge&logo=php&logoColor=white" alt="PHP version">
     </a>
@@ -39,18 +42,13 @@ memory management, and real-time capabilities.
 - ✅ **Stateless Design**: Memory-efficient stateless application lifecycle.
 - ✅ **Zero Configuration**: Works out of the box with minimal setup.
 
-## Installation
-
-[![Latest Stable Version](https://img.shields.io/packagist/v/yii2-extensions/franken-php.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Stable)](https://packagist.org/packages/yii2-extensions/franken-php)
-[![Total Downloads](https://img.shields.io/packagist/dt/yii2-extensions/franken-php.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Downloads)](https://packagist.org/packages/yii2-extensions/franken-php)
-
-## Quick start
+### Installation
 
 ```bash
 composer require yii2-extensions/franken-php:^0.1.0@dev
 ```
 
-### Basic Usage
+### Quick start
 
 Create your FrankenPHP entry point (`web/index.php`)
 ```php
@@ -58,22 +56,26 @@ Create your FrankenPHP entry point (`web/index.php`)
 
 declare(strict_types=1);
 
-use yii2\extensions\frankenphp\FrankenPHP;
-use yii2\extensions\psrbridge\http\StatelessApplication;
-
-// production default (change to 'true' for development)
-defined('YII_DEBUG') or define('YII_DEBUG', false);
-
-// production default (change to 'dev' for development)
-defined('YII_ENV') or define('YII_ENV', 'prod');
-
-require_once dirname(__DIR__) . '/vendor/autoload.php';
-require_once dirname(__DIR__) . '/vendor/yiisoft/yii2/Yii.php';
-
 // disable PHP automatic session cookie handling
 ini_set('session.use_cookies', '0');
 
-$config = require_once dirname(__DIR__) . '/config/web.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+use yii2\extensions\frankenphp\FrankenPHP;
+use yii2\extensions\psrbridge\http\StatelessApplication;
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->safeLoad();
+
+// production default (change to 'true' for development)
+define('YII_DEBUG', $_ENV['YII_DEBUG'] ?? false);
+// production default (change to 'dev' for development)
+define('YII_ENV', $_ENV['YII_ENV'] ?? 'prod');
+
+require_once dirname(__DIR__) . '/vendor/yiisoft/yii2/Yii.php';
+
+$config = require_once dirname(__DIR__) . '/config/web/app.php';
 
 $runner = new FrankenPHP(new StatelessApplication($config));
 
@@ -120,6 +122,8 @@ localhost {
 }
 ```
 
+> When using standalone binary, replace `worker ./index.php` with `worker ./web/index.php` in the `Caddyfile`.
+
 ### Standalone Binary
 
 We provide static FrankenPHP binaries for Linux and macOS containing [PHP 8.4](https://www.php.net/releases/8.4/en.php) 
@@ -138,13 +142,10 @@ mv frankenphp /usr/local/bin/
 To run your application, you can use the following command.
 
 ```bash
-cd web
-./frankenphp php-server --worker index.php
+./frankenphp run --config ./Caddyfile --watch
 ```
 
 ### Docker
-
-Docker images require the `web` directory to be mounted as `/app/web` and the application root directory as `/app`.
 
 Alternatively, [Docker images](https://frankenphp.dev/docs/docker/) are available.
 
@@ -155,16 +156,16 @@ Gitbash/Windows
 docker run \
   -e FRANKENPHP_CONFIG="worker ./web/index.php" \
   -e SERVER_ROOT=./web \
-  -v "//k/yii2-extensions/basic-frankenphp/Caddyfile:/etc/caddy/Caddyfile" \
-  -v "//k/yii2-extensions/basic-frankenphp:/app" \
-  -v "//k/yii2-extensions/basic-frankenphp/web:/app/web" \
+  -v "//k/yii2-extensions/app-basic/Caddyfile:/etc/caddy/Caddyfile" \
+  -v "//k/yii2-extensions/app-basic:/app" \
+  -v "//k/yii2-extensions/app-basic/web:/app/web" \
   -p 80:80 \
   -p 443:443 \
   -p 443:443/udp \
   --name yii2-frankenphp-worker \
   dunglas/frankenphp
 ```
-> **Note:** Paths in the example (`//k/yii2-extensions/basic-frankenphp`) are for demonstration purposes only.  
+> **Note:** Paths in the example (`//k/yii2-extensions/app-basic`) are for demonstration purposes only.  
 > Replace them with the actual path to your Yii2 project on your system.
 
 Linux/WSL
@@ -181,6 +182,8 @@ docker run \
   --name yii2-frankenphp-worker \
   dunglas/frankenphp
 ```
+
+> Your application will be available at `http://127.0.0.1` (or `http://localhost`) or at the address set in the `Caddyfile`.
 
 ### Development & Debugging
 
@@ -246,6 +249,7 @@ For detailed configuration options and advanced usage.
 
 ## Quality code
 
+[![Total Downloads](https://img.shields.io/packagist/dt/yii2-extensions/franken-php.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Downloads)](https://packagist.org/packages/yii2-extensions/franken-php)
 [![Codecov](https://img.shields.io/codecov/c/github/yii2-extensions/franken-php.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage)](https://codecov.io/github/yii2-extensions/franken-php)
 [![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-4F5D95.svg?style=for-the-badge&logo=php&logoColor=white)](https://github.com/yii2-extensions/franken-php/actions/workflows/static.yml)
 [![StyleCI](https://img.shields.io/badge/StyleCI-Passed-44CC11.svg?style=for-the-badge&logo=styleci&logoColor=white)](https://github.styleci.io/repos/1031393416?branch=main)
