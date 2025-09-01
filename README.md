@@ -7,9 +7,6 @@
 </p>
 
 <p align="center">
-    <a href="https://packagist.org/packages/yii2-extensions/franken-php" target="_blank">
-        <img src="https://img.shields.io/badge/Status-Dev-orange.svg?style=for-the-badge&logo=packagist&logoColor=white" alt="Development Status">
-    </a>
     <a href="https://www.php.net/releases/8.1/en.php" target="_blank">
         <img src="https://img.shields.io/badge/%3E%3D8.1-777BB4.svg?style=for-the-badge&logo=php&logoColor=white" alt="PHP version">
     </a>
@@ -22,6 +19,9 @@
     <a href="https://github.com/yii2-extensions/franken-php/actions/workflows/build.yml" target="_blank">
         <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/franken-php/build.yml?style=for-the-badge&label=PHPUnit" alt="PHPUnit">
     </a>
+    <a href="https://dashboard.stryker-mutator.io/reports/github.com/yii2-extensions/franken-php/main" target="_blank">
+        <img src="https://img.shields.io/endpoint?style=for-the-badge&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyii2-extensions%2Ffranken-php%2Fmain" alt="Mutation Testing">
+    </a>     
     <a href="https://github.com/yii2-extensions/franken-php/actions/workflows/static.yml" target="_blank">
         <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/franken-php/static.yml?style=for-the-badge&label=PHPStan" alt="PHPStan">
     </a>
@@ -247,9 +247,13 @@ For detailed configuration options and advanced usage.
 - ⚙️ [Configuration Reference](docs/configuration.md) 
 - 🧪 [Testing Guide](docs/testing.md)
 
+## Package information
+
+[![Development Status](https://img.shields.io/badge/Status-Dev-orange.svg?style=for-the-badge&logo=packagist&logoColor=white)](https://packagist.org/packages/yii2-extensions/franken-php)
+[![Total Downloads](https://img.shields.io/packagist/dt/yii2-extensions/franken-php.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Downloads)](https://packagist.org/packages/yii2-extensions/franken-php)
+
 ## Quality code
 
-[![Total Downloads](https://img.shields.io/packagist/dt/yii2-extensions/franken-php.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Downloads)](https://packagist.org/packages/yii2-extensions/franken-php)
 [![Codecov](https://img.shields.io/codecov/c/github/yii2-extensions/franken-php.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage)](https://codecov.io/github/yii2-extensions/franken-php)
 [![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-4F5D95.svg?style=for-the-badge&logo=php&logoColor=white)](https://github.com/yii2-extensions/franken-php/actions/workflows/static.yml)
 [![StyleCI](https://img.shields.io/badge/StyleCI-Passed-44CC11.svg?style=for-the-badge&logo=styleci&logoColor=white)](https://github.styleci.io/repos/1031393416?branch=main)
