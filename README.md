@@ -75,7 +75,7 @@ define('YII_ENV', $_ENV['YII_ENV'] ?? 'prod');
 
 require_once dirname(__DIR__) . '/vendor/yiisoft/yii2/Yii.php';
 
-$config = require_once dirname(__DIR__) . '/config/web/app.php';
+$config = require_once dirname(__DIR__) . '/config/web.php';
 
 $runner = new FrankenPHP(new StatelessApplication($config));
 
