@@ -44,9 +44,9 @@ memory management, and real-time capabilities.
 
 ## Demo
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-App%20Basic-74AA9C?style=for-the-badge&logo=rocket&logoColor=white)](https://github.com/yii2-extensions/app-basic/tree/franken-php)
++[![Template](https://img.shields.io/badge/Template-App%20Basic-74AA9C?style=for-the-badge&logo=rocket&logoColor=white)](https://github.com/yii2-extensions/app-basic/tree/franken-php)
 
-Experience FrankenPHP with Yii2 using our ready-to-run application template that showcases all features in action.
+Explore the ready-to-run Yii2 + FrankenPHP application template.
 
 ### Installation
 
