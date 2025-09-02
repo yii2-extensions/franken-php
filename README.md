@@ -89,18 +89,21 @@ Create `Caddyfile` in your project root (worker mode)
 {
     auto_https off
     admin localhost:2019
+    https_port 8443
 
     frankenphp {
-        worker ./index.php
+        worker ./web/index.php
     }
 }
 
 localhost {
+    tls ./web/ssl/localhost.pem ./web/ssl/localhost-key.pem
+
     log
 
     encode zstd br gzip
 
-    root {$SERVER_ROOT:public/}
+    root ./web
 
     request_header X-Sendfile-Type x-accel-redirect
     request_header X-Accel-Mapping ../private-files=/private-files
@@ -121,8 +124,9 @@ localhost {
     }
 }
 ```
-
-> When using standalone binary, replace `worker ./index.php` with `worker ./web/index.php` in the `Caddyfile`.
+> **Note:** Using custom certificates (like `tls ./web/ssl/localhost.pem ./web/ssl/localhost-key.pem`) avoids browser trust warnings that occur with Caddy's automatic self-signed certificates.   
+> For local development, consider using [mkcert](https://github.com/FiloSottile/mkcert) to generate trusted local certificates.   
+> If you want to use Caddy's automatic self-signed certificates for local development, you can remove this line.
 
 ### Standalone Binary
 
@@ -154,14 +158,14 @@ Alternatively, [Docker images](https://frankenphp.dev/docs/docker/) are availabl
 Gitbash/Windows
 ```bash
 docker run \
+  -e CADDY_GLOBAL_OPTIONS="auto_https off" \
+  -e CADDY_SERVER_EXTRA_DIRECTIVES="tls /app/web/ssl/localhost.pem /app/web/ssl/localhost-key.pem" \
   -e FRANKENPHP_CONFIG="worker ./web/index.php" \
-  -e SERVER_ROOT=./web \
-  -v "//k/yii2-extensions/app-basic/Caddyfile:/etc/caddy/Caddyfile" \
+  -e SERVER_NAME="https://localhost:8443" \
+  -e SERVER_ROOT="./web" \
   -v "//k/yii2-extensions/app-basic:/app" \
-  -v "//k/yii2-extensions/app-basic/web:/app/web" \
-  -p 80:80 \
-  -p 443:443 \
-  -p 443:443/udp \
+  -p 8443:8443 \
+  -p 8443:8443/udp \
   --name yii2-frankenphp-worker \
   dunglas/frankenphp
 ```
@@ -171,19 +175,19 @@ docker run \
 Linux/WSL
 ```bash
 docker run \
+  -e CADDY_GLOBAL_OPTIONS="auto_https off" \
+  -e CADDY_SERVER_EXTRA_DIRECTIVES="tls /app/web/ssl/localhost.pem /app/web/ssl/localhost-key.pem" \
   -e FRANKENPHP_CONFIG="worker ./web/index.php" \
-  -e SERVER_ROOT=./web \  
-  -v $PWD/Caddyfile:/etc/caddy/Caddyfile \
+  -e SERVER_NAME="https://localhost:8443" \
+  -e SERVER_ROOT="./web" \
   -v $PWD:/app \
-  -v $PWD/web:/app/web \
-  -p 80:80 \
-  -p 443:443 \
-  -p 443:443/udp \
+  -p 8443:8443 \
+  -p 8443:8443/udp \
   --name yii2-frankenphp-worker \
   dunglas/frankenphp
 ```
 
-> Your application will be available at `http://127.0.0.1` (or `http://localhost`) or at the address set in the `Caddyfile`.
+> Your application will be available at `https://localhost:8443` or at the address set in the `Caddyfile`.
 
 ### Development & Debugging
 
