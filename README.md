@@ -42,6 +42,12 @@ memory management, and real-time capabilities.
 - ✅ **Stateless Design**: Memory-efficient stateless application lifecycle.
 - ✅ **Zero Configuration**: Works out of the box with minimal setup.
 
+## Demo
+
+[![Template](https://img.shields.io/badge/Template-App%20Basic-74AA9C?style=for-the-badge&logo=yii&logoColor=white)](https://github.com/yii2-extensions/app-basic/tree/franken-php)
+
+Explore the ready-to-run Yii2 + FrankenPHP application template.
+
 ### Installation
 
 ```bash
