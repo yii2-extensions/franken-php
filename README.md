@@ -124,7 +124,8 @@ localhost {
     }
 }
 ```
-> **Note:** The `tls ./web/ssl/localhost.pem ./web/ssl/localhost-key.pem` line is only needed if you're using custom SSL certificates.  
+> **Note:** Using custom certificates (like `tls ./web/ssl/localhost.pem ./web/ssl/localhost-key.pem`) avoids browser trust warnings that occur with Caddy's automatic self-signed certificates.   
+> For local development, consider using [mkcert](https://github.com/FiloSottile/mkcert) to generate trusted local certificates.   
 > If you want to use Caddy's automatic self-signed certificates for local development, you can remove this line.
 
 ### Standalone Binary
