@@ -19,7 +19,7 @@ name: mutation test
 
 jobs:
   mutation:
-    uses: php-forge/actions/.github/workflows/infection.yml@v1
+    uses: php-forge/actions/.github/workflows/infection.yml@v2
     with:
       phpstan: true
     secrets:
