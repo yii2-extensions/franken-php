@@ -19,4 +19,4 @@ name: Composer require checker
 
 jobs:
   composer-require-checker:
-    uses: php-forge/actions/.github/workflows/composer-require-checker.yml@v1
+    uses: php-forge/actions/.github/workflows/composer-require-checker.yml@v2
