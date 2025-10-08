@@ -1,5 +1,3 @@
 {
-    "symbol-whitelist": [
-        "frankenphp_handle_request"
-    ]
+    "symbol-whitelist": ["frankenphp_handle_request"]
 }
