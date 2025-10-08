@@ -1,6 +1,6 @@
 # ChangeLog
 
-## 0.1.0 September 26, 2025
+## 0.1.0 October 8, 2025
 
 - Enh #2: Introduce `FrankenPHP` implementation with tests (@terabytesoftw)
 - Bug #3: Add tests for `FrankenPHP` request handling and `MAX_REQUESTS` behavior (@terabytesoftw)
