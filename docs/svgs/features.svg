@@ -1,0 +1,72 @@
+<svg fill="none" viewBox="0 0 1200 340" width="100%" height="340" xmlns="http://www.w3.org/2000/svg">
+    <foreignObject width="100%" height="100%">
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            <style>
+                .container {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 20px;
+                    padding: 20px;
+                }
+                .alert-box {
+                    border-left: 4px solid #1f883d;
+                    padding: 12px;
+                    margin-bottom: 16px;
+                    border-radius: 6px;
+                    background: rgba(31, 136, 61, 0.1);
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                .alert-title {
+                    margin: 0 0 8px 0;
+                    font-weight: 600;
+                }
+                .alert-content {
+                    margin: 0;
+                    line-height: 1.5;
+                }
+
+                /* Light mode */
+                    @media (prefers-color-scheme: light) {
+                    .alert-title { color: #000000; }
+                    .alert-content { color: #333333; }
+                    .alert-box { background: rgba(31, 136, 61, 0.1); }
+                }
+
+                /* Dark mode */
+                @media (prefers-color-scheme: dark) {
+                    .alert-title { color: #ffffff; }
+                    .alert-content { color: #ffffff; }
+                    .alert-box { background: rgba(31, 136, 61, 0.2); }
+                }
+            </style>
+            <div class="container">
+                <div class="alert-box">
+                    <p class="alert-title"><strong>Automatic Memory Management</strong></p>
+                    <p class="alert-content">Smart cleanup • Configurable limits • Graceful shutdown</p>
+                </div>
+                <div class="alert-box">
+                    <p class="alert-title"><strong>HTTP/2 &amp; HTTP/3 Support</strong></p>
+                    <p class="alert-content">Native protocols • Multiplexing • Server push capabilities</p>
+                </div>
+                <div class="alert-box">
+                    <p class="alert-title"><strong>Production Ready</strong></p>
+                    <p class="alert-content">Battle-tested with Caddy • Comprehensive error handling • Debug support</p>
+                </div>
+                <div class="alert-box">
+                    <p class="alert-title"><strong>PSR-7 Compatible</strong></p>
+                    <p class="alert-content">Full request/response handling • Standard interfaces • Middleware ready</p>
+                </div>
+                <div class="alert-box">
+                    <p class="alert-title"><strong>Worker Mode Performance</strong></p>
+                    <p class="alert-content">Long-running workers • Higher throughput • Lower latency</p>
+                </div>
+                <div class="alert-box">
+                    <p class="alert-title"><strong>Zero Configuration</strong></p>
+                    <p class="alert-content">Works out of the box • Minimal setup • Quick start templates</p>
+                </div>
+            </div>
+        </div>
+    </foreignObject>
+</svg>

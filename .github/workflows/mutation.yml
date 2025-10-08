@@ -1,25 +1,24 @@
+---
 on:
-  pull_request:
+  pull_request: &ignore-paths
     paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - '.gitignore'
-      - '.gitattributes'
+      - ".gitattributes"
+      - ".gitignore"
+      - "CHANGELOG.md"
+      - "docs/**"
+      - "README.md"
 
-  push:
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - '.gitignore'
-      - '.gitattributes'
+  push: *ignore-paths
 
 name: mutation test
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   mutation:
-    uses: php-forge/actions/.github/workflows/infection.yml@v2
+    uses: yii2-framework/actions/.github/workflows/infection.yml@v1
     with:
       phpstan: true
     secrets:

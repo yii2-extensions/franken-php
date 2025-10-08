@@ -94,7 +94,7 @@ localhost {
 
 ### Install FrankenPHP binary
 
-We provide static FrankenPHP binaries for Linux and macOS containing [PHP 8.4](https://www.php.net/releases/8.4/en.php) 
+We provide static FrankenPHP binaries for Linux and macOS containing [PHP 8.4](https://www.php.net/releases/8.4/en.php)
 and most popular PHP extensions.
 
 On Windows, use [WSL](https://learn.microsoft.com/windows/wsl/) to run FrankenPHP.

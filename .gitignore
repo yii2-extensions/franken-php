@@ -1,6 +1,9 @@
 #code coverage
 /code_coverage
 
+#copilot
+copilot
+
 # composer vendor dir
 /vendor
 /composer.lock
