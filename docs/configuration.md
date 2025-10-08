@@ -67,6 +67,7 @@ app-basic/
 ### Configuration files
 
 console.php
+
 ```php
 <?php
 
@@ -137,6 +138,7 @@ return $config;
 ```
 
 db.php
+
 ```php
 <?php
 
@@ -157,6 +159,7 @@ return [
 ```
 
 params.php
+
 ```php
 <?php
 
@@ -170,6 +173,7 @@ return [
 ```
 
 test_db.php
+
 ```php
 <?php
 
@@ -185,6 +189,7 @@ return $db;
 ```
 
 test.php
+
 ```php
 <?php
 
@@ -209,7 +214,7 @@ return [
         '@npm'   => '@vendor/npm-asset',
     ],
     'language' => 'en-US',
-    'components' => [       
+    'components' => [
         'db' => $db,
         'mailer' => [
             'class' => Mailer::class,
@@ -241,6 +246,7 @@ return [
 ```
 
 web.php
+
 ```php
 <?php
 
@@ -248,7 +254,7 @@ declare(strict_types=1);
 
 use app\models\User;
 use HttpSoft\Message\{
-    ResponseFactory, 
+    ResponseFactory,
     ServerRequestFactory,
     StreamFactory,
     UploadedFileFactory,
@@ -279,7 +285,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'components' => [  
+    'components' => [
         'request' => [
             // note: this key is for testing only. Replace with a secure, random string in production!
             'cookieValidationKey' => 'your-cookie-validation-key',
