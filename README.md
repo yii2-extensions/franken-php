@@ -49,6 +49,7 @@ composer require yii2-extensions/franken-php:^0.1.0@dev
 ### Quick start
 
 Create your FrankenPHP entry point (`web/index.php`)
+
 ```php
 <?php
 
@@ -83,6 +84,7 @@ $runner->run();
 ### FrankenPHP configuration
 
 Create `Caddyfile` in your project root (worker mode)
+
 ```caddyfile
 {
     auto_https off
@@ -122,13 +124,15 @@ localhost {
     }
 }
 ```
-> **Note:** Using custom certificates (like `tls ./web/ssl/localhost.pem ./web/ssl/localhost-key.pem`) avoids browser trust warnings that occur with Caddy's automatic self-signed certificates.   
-> For local development, consider using [mkcert](https://github.com/FiloSottile/mkcert) to generate trusted local certificates.   
+
+> [!WARNING]
+> **Note:** Using custom certificates (like `tls ./web/ssl/localhost.pem ./web/ssl/localhost-key.pem`) avoids browser trust warnings that occur with Caddy's automatic self-signed certificates.  
+> For local development, consider using [mkcert](https://github.com/FiloSottile/mkcert) to generate trusted local certificates.  
 > If you want to use Caddy's automatic self-signed certificates for local development, you can remove this line.
 
 ### Standalone Binary
 
-We provide static FrankenPHP binaries for Linux and macOS containing [PHP 8.4](https://www.php.net/releases/8.4/en.php) 
+We provide static FrankenPHP binaries for Linux and macOS containing [PHP 8.4](https://www.php.net/releases/8.4/en.php)
 and most popular PHP extensions.
 
 On Windows, use [WSL](https://learn.microsoft.com/windows/wsl/) to run FrankenPHP.
@@ -154,6 +158,9 @@ Alternatively, [Docker images](https://frankenphp.dev/docs/docker/) are availabl
 #### Worker mode
 
 Gitbash/Windows
+
+<!-- editorconfig-checker-disable -->
+<!-- prettier-ignore-start -->
 ```bash
 docker run \
   -e CADDY_GLOBAL_OPTIONS="auto_https off" \
@@ -167,10 +174,16 @@ docker run \
   --name yii2-frankenphp-worker \
   dunglas/frankenphp
 ```
+<!-- prettier-ignore-end -->
+<!-- editorconfig-checker-enable -->
+
 > **Note:** Paths in the example (`//k/yii2-extensions/app-basic`) are for demonstration purposes only.  
 > Replace them with the actual path to your Yii2 project on your system.
 
 Linux/WSL
+
+<!-- editorconfig-checker-disable -->
+<!-- prettier-ignore-start -->
 ```bash
 docker run \
   -e CADDY_GLOBAL_OPTIONS="auto_https off" \
@@ -184,7 +197,10 @@ docker run \
   --name yii2-frankenphp-worker \
   dunglas/frankenphp
 ```
+<!-- prettier-ignore-end -->
+<!-- editorconfig-checker-enable -->
 
+> [!IMPORTANT]
 > Your application will be available at `https://localhost:8443` or at the address set in the `Caddyfile`.
 
 ### Development & Debugging
@@ -217,7 +233,7 @@ if (YII_ENV_DEV) {
 
 ### File Upload Handling
 
-For enhanced file upload support in worker environments, use the PSR-7 bridge UploadedFile class instead of the standard 
+For enhanced file upload support in worker environments, use the PSR-7 bridge UploadedFile class instead of the standard
 Yii2 implementation.
 
 ```php
@@ -232,11 +248,11 @@ final class FileController extends \yii\web\Controller
     public function actionUpload(): Response
     {
         $file = UploadedFile::getInstanceByName('avatar');
-        
+
         if ($file !== null && $file->error === UPLOAD_ERR_OK) {
             $file->saveAs('@webroot/uploads/' . $file->name);
         }
-        
+
         return $this->asJson(['status' => 'uploaded']);
     }
 }
@@ -245,8 +261,9 @@ final class FileController extends \yii\web\Controller
 ## Documentation
 
 For detailed configuration options and advanced usage.
+
 - 📚 [Installation Guide](docs/installation.md)
-- ⚙️ [Configuration Reference](docs/configuration.md) 
+- ⚙️ [Configuration Reference](docs/configuration.md)
 - 🧪 [Testing Guide](docs/testing.md)
 
 ## Package information
