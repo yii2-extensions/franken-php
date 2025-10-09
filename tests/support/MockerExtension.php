@@ -12,6 +12,12 @@ use PHPUnit\TextUI\Configuration\Configuration;
 use Xepozz\InternalMocker\{Mocker, MockerState};
 use yii2\extensions\frankenphp\tests\support\stub\HTTPFunctions;
 
+/**
+ * Custom configuration extension for mocking internal functions.
+ *
+ * @copyright Copyright (C) 2025 Terabytesoftw.
+ * @license https://opensource.org/license/bsd-3-clause BSD 3-Clause License.
+ */
 final class MockerExtension implements Extension
 {
     public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters): void

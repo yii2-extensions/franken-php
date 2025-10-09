@@ -3,7 +3,7 @@ includes:
 
 parameters:
     bootstrapFiles:
-        - tests/bootstrap.php
+        - tests/support/bootstrap.php
 
     level: max
 

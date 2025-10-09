@@ -8,6 +8,7 @@ use Exception;
 use PHPUnit\Framework\Attributes\Group;
 use yii2\extensions\frankenphp\FrankenPHP;
 use yii2\extensions\frankenphp\tests\support\stub\HTTPFunctions;
+use yii2\extensions\frankenphp\tests\support\TestCase;
 use yii2\extensions\psrbridge\exception\HeadersAlreadySentException;
 use yii2\extensions\psrbridge\http\ServerExitCode;
 
@@ -16,6 +17,18 @@ use function sprintf;
 
 use const PHP_INT_MAX;
 
+/**
+ * Test suite for {@see FrankenPHP} core bridge functionality.
+ *
+ * Validates integration and behavior of the FrankenPHP bridge within Yii2 applications.
+ *
+ * Test coverage.
+ * - Ensures correct initialization and teardown of FrankenPHP environment.
+ * - Verifies HTTP function stubbing and environment variable handling.
+ *
+ * @copyright Copyright (C) 2025 Terabytesoftw.
+ * @license https://opensource.org/license/bsd-3-clause BSD 3-Clause License.
+ */
 #[Group('frankenphp')]
 final class FrankenPHPTest extends TestCase
 {
