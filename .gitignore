@@ -1,27 +1,47 @@
-#code coverage
-/code_coverage
+# codecoverage (if present)
+code_coverage
 
-#copilot
-copilot
+# codeception (if present)
+c3.php
 
-# composer vendor dir
-/vendor
-/composer.lock
+# composer
+composer.lock
 
-#node_modules
-/node_modules
+# gitHub copilot config (if present)
+.copilot/
+.github/copilot/**
 
-# phpstorm project files
+# mac ds_store (if present)
+.DS_Store
+
+# netbeans project (if present)
+nbproject
+
+# node_modules (if present)
+node_modules
+package-lock.json
+
+# phpstorm project (if present)
 .idea
 
-# phpunit
-phpunit.phar
-.phpunit.result.cache
+# phpunit (if present)
 .phpunit.cache
-phpunit.xlm
+.phpunit.result.cache
+phpunit.xml*
 
-#yii3 config packages
-/config/packages
+# vagrant (if present)
+.vagrant
 
-# windows thumbnail cache
+# vendor
+vendor
+
+# vscode project (if present)
+.vscode
+
+# windows thumbnail cache (if present)
 Thumbs.db
+
+# zend studio for eclipse project (if present)
+.buildpath
+.project
+.settings
