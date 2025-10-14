@@ -3,6 +3,7 @@
 ## 0.1.1 Under development
 
 - Bug #30: Update `tests/support/bootstrap.php` file path and add `TestCase` class for improved testing structure (@terabytesoftw)
+- Bug #31: Update `.editorconfig` and `.gitignore` for improved consistency and clarity (@terabytesoftw)
 
 ## 0.1.0 October 8, 2025
 
