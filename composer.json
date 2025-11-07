@@ -20,7 +20,7 @@
         "phpstan/phpstan-strict-rules": "^2.0.3",
         "phpunit/phpunit": "^10.5",
         "rector/rector": "^2.1",
-        "symplify/easy-coding-standard": "^12.5",
+        "symplify/easy-coding-standard": "^13.0",
         "xepozz/internal-mocker": "^1.4",
         "yii2-extensions/phpstan": "^0.3"
     },
