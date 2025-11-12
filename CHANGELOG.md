@@ -4,6 +4,7 @@
 
 - Bug #30: Update `tests/support/bootstrap.php` file path and add `TestCase` class for improved testing structure (@terabytesoftw)
 - Bug #31: Update `.editorconfig` and `.gitignore` for improved consistency and clarity (@terabytesoftw)
+- Dep #32: Update `symplify/easy-coding-standard requirement` from `^12.5` to `^13.0` (@dependabot)
 
 ## 0.1.0 October 8, 2025
 
