@@ -287,4 +287,4 @@ For detailed configuration options and advanced usage.
 
 ## License
 
-[![License](https://img.shields.io/github/license/yii2-extensions/franken-php?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=333333)](LICENSE.md)
+[![License](https://img.shields.io/badge/License-BSD--3--Clause-brightgreen.svg?style=for-the-badge&logo=opensourceinitiative&logoColor=white&labelColor=555555)](LICENSE)

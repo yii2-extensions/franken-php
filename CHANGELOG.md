@@ -37,3 +37,4 @@
 - Bug #28: Update workflows and documentation for improved CI/CD processes and feature clarity (@terabytesoftw)
 - Bug #29: Update development status badge to reflect the latest stable version in `README.md` (@terabytesoftw)
 - Bug #30: Update SVG dimensions in `features-mobile.svg` for improved layout consistency (@terabytesoftw)
+- Bug #31: Update license badge style in `README.md` (@terabytesoftw)
