@@ -36,3 +36,4 @@
 - Bug #27: Bump `php-forge/actions` from `1` to `2` (@terabytesoftw)
 - Bug #28: Update workflows and documentation for improved CI/CD processes and feature clarity (@terabytesoftw)
 - Bug #29: Update development status badge to reflect the latest stable version in `README.md` (@terabytesoftw)
+- Bug #30: Update SVG dimensions in `features-mobile.svg` for improved layout consistency (@terabytesoftw)
