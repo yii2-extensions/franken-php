@@ -105,6 +105,8 @@ localhost {
 
     root ./web
 
+    # compatibility headers to enable X-Sendfile support in PHP frameworks (Yii2/Symfony)
+    # see: https://github.com/php/frankenphp/blob/main/docs/x-sendfile.md
     request_header X-Sendfile-Type x-accel-redirect
     request_header X-Accel-Mapping ../private-files=/private-files
 

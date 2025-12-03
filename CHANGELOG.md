@@ -38,3 +38,4 @@
 - Bug #29: Update development status badge to reflect the latest stable version in `README.md` (@terabytesoftw)
 - Bug #30: Update SVG dimensions in `features-mobile.svg` for improved layout consistency (@terabytesoftw)
 - Bug #31: Update license badge style in `README.md` (@terabytesoftw)
+- Bug #32: Update `X-Sendfile` support configuration to `Caddyfile` example in `README.md` (@terabytesoftw)
