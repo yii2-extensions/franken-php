@@ -404,6 +404,7 @@ final class FrankenPHPTest extends TestCase
 
         $frankenPHP->run();
     }
+
     protected function setUp(): void
     {
         parent::setUp();
