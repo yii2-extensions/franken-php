@@ -1,5 +1,7 @@
 # ChangeLog
 
+## 0.1.2 Under development
+
 ## 0.1.1 January 25, 2026
 
 - Bug #30: Update `tests/support/bootstrap.php` file path and add `TestCase` class for improved testing structure (@terabytesoftw)
