@@ -14,7 +14,7 @@ use Psr\Http\Message\{
 use yii\caching\FileCache;
 use yii\helpers\ArrayHelper;
 use yii\log\FileTarget;
-use yii\web\JsonParser;
+use yii\web\{IdentityInterface, JsonParser};
 use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
 use yii2\extensions\psrbridge\http\StatelessApplication;
@@ -53,6 +53,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *   runtimePath?: string,
      *   vendorPath?: string
      * } $config
+     * @phpstan-return StatelessApplication<IdentityInterface>
      */
     protected function statelessApplication(array $config = []): StatelessApplication
     {

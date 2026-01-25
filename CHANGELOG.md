@@ -2,12 +2,11 @@
 
 ## 0.1.2 Under development
 
+- Bug #39: Add `phpstan` type hints for `StatelessApplication` in `FrankenPHP` and `TestCase` classes (@terabytesoftw)
+
 ## 0.1.1 January 25, 2026
 
-- Bug #30: Update `tests/support/bootstrap.php` file path and add `TestCase` class for improved testing structure (@terabytesoftw)
-- Bug #31: Update `.editorconfig` and `.gitignore` for improved consistency and clarity (@terabytesoftw)
-- Dep #32: Update `symplify/easy-coding-standard requirement` from `^12.5` to `^13.0` (@dependabot)
-- Enh #33: Add `php-forge/coding-standard` to development dependencies for code quality checks and add support `PHP 8.5` (@terabytesoftw)
+- Enh #38: Add `php-forge/coding-standard` to development dependencies for code quality checks and add support `PHP 8.5` (@terabytesoftw)
 
 ## 0.1.0 October 8, 2025
 
@@ -39,9 +38,9 @@
 - Bug #27: Bump `php-forge/actions` from `1` to `2` (@terabytesoftw)
 - Bug #28: Update workflows and documentation for improved CI/CD processes and feature clarity (@terabytesoftw)
 - Bug #29: Update development status badge to reflect the latest stable version in `README.md` (@terabytesoftw)
-- Bug #30: Update `tests/support/bootstrap.php` file path and add TestCase class for improved testing structure (@terabytesoftw)
+- Bug #30: Update `tests/support/bootstrap.php` file path and add `TestCase`` class for improved testing structure (@terabytesoftw)
 - Bug #31: Update `.editorconfig` and `.gitignore` for improved consistency and clarity (@terabytesoftw)
-- Bug #32: Update `symplify/easy-coding-standard` requirement from `^12.5` to `^13.0` (@dependabot)
+- Dep #32: Update `symplify/easy-coding-standard` requirement from `^12.5` to `^13.0` (@dependabot)
 - Bug #33: Update SVG dimensions in `features-mobile.svg` for improved layout consistency (@terabytesoftw)
 - Bug #34: Update license badge style in `README.md` (@terabytesoftw)
 - Bug #36: Update `X-Sendfile` support configuration to `Caddyfile` example in `README.md` (@terabytesoftw)
