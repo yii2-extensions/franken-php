@@ -14,11 +14,10 @@ use Psr\Http\Message\{
 use yii\caching\FileCache;
 use yii\helpers\ArrayHelper;
 use yii\log\FileTarget;
-use yii\web\JsonParser;
+use yii\web\{IdentityInterface, JsonParser};
 use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
 use yii2\extensions\psrbridge\http\StatelessApplication;
-use yii\web\IdentityInterface;
 
 use function dirname;
 

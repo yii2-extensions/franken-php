@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace yii2\extensions\frankenphp;
 
 use Throwable;
+use yii\web\IdentityInterface;
 use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
 use yii2\extensions\psrbridge\http\{ServerExitCode, StatelessApplication};
-use yii\web\IdentityInterface;
 
 use function is_numeric;
 
