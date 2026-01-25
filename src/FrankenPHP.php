@@ -8,6 +8,7 @@ use Throwable;
 use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
 use yii2\extensions\psrbridge\http\{ServerExitCode, StatelessApplication};
+use yii\web\IdentityInterface;
 
 use function is_numeric;
 
@@ -54,6 +55,8 @@ final class FrankenPHP
      * from `MAX_REQUESTS` env var, otherwise defaults to `1000`.
      *
      * @throws Throwable if the emitter or server request creator cannot be instantiated.
+     *
+     * @phpstan-param StatelessApplication<IdentityInterface> $app
      */
     public function __construct(
         private readonly StatelessApplication $app,

@@ -18,6 +18,7 @@ use yii\web\JsonParser;
 use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
 use yii2\extensions\psrbridge\http\StatelessApplication;
+use yii\web\IdentityInterface;
 
 use function dirname;
 
@@ -53,6 +54,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *   runtimePath?: string,
      *   vendorPath?: string
      * } $config
+     * @phpstan-return StatelessApplication<IdentityInterface>
      */
     protected function statelessApplication(array $config = []): StatelessApplication
     {
