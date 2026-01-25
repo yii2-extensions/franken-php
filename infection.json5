@@ -1,5 +1,5 @@
 {
-    $schema: "vendor/infection/infection/resources/schema.json",
+    $schema: "./vendor/infection/infection/resources/schema.json",
     logs: {
         text: "php://stderr",
         stryker: {

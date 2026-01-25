@@ -39,12 +39,12 @@ final class FrankenPHP
     /**
      * Emitter for PSR-7 responses to the SAPI.
      */
-    private SapiEmitter $emitter;
+    private readonly SapiEmitter $emitter;
 
     /**
      * ServerRequestCreator for creating PSR-7 ServerRequest instances from global variables.
      */
-    private ServerRequestCreator $serverRequestCreator;
+    private readonly ServerRequestCreator $serverRequestCreator;
 
     /**
      * Creates a new instance of the {@see FrankenPHP} class.

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-    bootstrap="tests/support/bootstrap.php"
-    cacheDirectory="runtime/.phpunit.cache"
-    colors="true"
-    executionOrder="depends,defects"
-    failOnRisky="true"
-    failOnWarning="true"
-    stopOnFailure="false"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+  bootstrap="tests/support/bootstrap.php"
+  cacheDirectory="./runtime/.phpunit.cache"
+  colors="true"
+  executionOrder="depends,defects"
+  failOnRisky="true"
+  failOnWarning="true"
+  stopOnFailure="false"
 >
-    <testsuites>
-        <testsuite name="Yii2-Franken-PHP">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
+  <extensions>
+    <bootstrap class="yii2\extensions\frankenphp\tests\support\MockerExtension"/>
+  </extensions>
 
-    <source>
-        <include>
-            <directory suffix=".php">./src</directory>
-        </include>
-    </source>
+  <testsuites>
+    <testsuite name="FrankenPHP">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
 
-    <extensions>
-        <bootstrap class="yii2\extensions\frankenphp\tests\support\MockerExtension"/>
-    </extensions>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </source>
 </phpunit>

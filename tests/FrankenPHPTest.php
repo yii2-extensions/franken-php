@@ -32,26 +32,6 @@ use const PHP_INT_MAX;
 #[Group('frankenphp')]
 final class FrankenPHPTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        HTTPFunctions::reset();
-
-        // clear 'MAX_REQUESTS' environment variable
-        unset($_ENV['MAX_REQUESTS']);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        HTTPFunctions::reset();
-
-        // clear 'MAX_REQUESTS' environment variable
-        unset($_ENV['MAX_REQUESTS']);
-    }
-
     public function testConstructorMaxRequestsOverridesEnvironmentAndDefault(): void
     {
         $_ENV['MAX_REQUESTS'] = '999';
@@ -423,5 +403,25 @@ final class FrankenPHPTest extends TestCase
         $this->expectExceptionMessage('An error occurred during request processing.');
 
         $frankenPHP->run();
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        HTTPFunctions::reset();
+
+        // clear 'MAX_REQUESTS' environment variable
+        unset($_ENV['MAX_REQUESTS']);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        HTTPFunctions::reset();
+
+        // clear 'MAX_REQUESTS' environment variable
+        unset($_ENV['MAX_REQUESTS']);
     }
 }
