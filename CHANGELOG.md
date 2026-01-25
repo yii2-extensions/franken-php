@@ -1,6 +1,6 @@
 # ChangeLog
 
-## 0.1.1 Under development
+## 0.1.1 January 25, 2026
 
 - Bug #30: Update `tests/support/bootstrap.php` file path and add `TestCase` class for improved testing structure (@terabytesoftw)
 - Bug #31: Update `.editorconfig` and `.gitignore` for improved consistency and clarity (@terabytesoftw)
