@@ -14,7 +14,7 @@
     },
     "require-dev": {
         "httpsoft/http-message": "^1.1",
-        "infection/infection": "^0.27|^0.31",
+        "infection/infection": "^0.27|^0.32",
         "maglnet/composer-require-checker": "^4.1",
         "php-forge/coding-standard": "^0.1",
         "phpstan/extension-installer": "^1.4",
