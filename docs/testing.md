@@ -16,7 +16,7 @@ Tool references:
 Run Rector to apply automated code refactoring.
 
 ```bash
-composer run rector
+composer rector
 ```
 
 ## Coding standards (ECS)
@@ -24,7 +24,7 @@ composer run rector
 Run Easy Coding Standard (ECS) and apply fixes.
 
 ```bash
-composer run ecs
+composer ecs
 ```
 
 ## Dependency definition check
@@ -32,7 +32,7 @@ composer run ecs
 Verify that runtime dependencies are correctly declared in `composer.json`.
 
 ```bash
-composer run check-dependencies
+composer check-dependencies
 ```
 
 ## Mutation testing (Infection)
@@ -40,13 +40,13 @@ composer run check-dependencies
 Run mutation testing.
 
 ```bash
-composer run mutation
+composer mutation
 ```
 
 Run mutation testing with static analysis enabled.
 
 ```bash
-composer run mutation-static
+composer mutation-static
 ```
 
 ## Static analysis (PHPStan)
@@ -54,7 +54,7 @@ composer run mutation-static
 Run static analysis.
 
 ```bash
-composer run static
+composer static
 ```
 
 ## Unit tests (PHPUnit)
@@ -62,7 +62,7 @@ composer run static
 Run the full test suite.
 
 ```bash
-composer run tests
+composer tests
 ```
 
 ## Passing extra arguments
