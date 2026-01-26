@@ -3,6 +3,7 @@
 ## 0.1.2 Under development
 
 - Bug #39: Add `phpstan` type hints for `StatelessApplication` in `FrankenPHP` and `TestCase` classes (@terabytesoftw)
+- Bug #40: Update examples in `testing.md` for running Composer script with arguments (@terabytesoftw)
 
 ## 0.1.1 January 25, 2026
 
@@ -35,7 +36,7 @@
 - Bug #24: Update `README.md` to remove outdated status badge and reorganize package information section (@terabytesoftw)
 - Bug #25: Update `README.md` to correct `Caddyfile` worker path and enhance SSL configuration instructions (@terabytesoftw)
 - Bug #26: Add demo section to `README.md` with a link to the live application template (@terabytesoftw)
-- Bug #27: Bump `php-forge/actions` from `1` to `2` (@terabytesoftw)
+- Dep #27: Bump `php-forge/actions` from `1` to `2` (@terabytesoftw)
 - Bug #28: Update workflows and documentation for improved CI/CD processes and feature clarity (@terabytesoftw)
 - Bug #29: Update development status badge to reflect the latest stable version in `README.md` (@terabytesoftw)
 - Bug #30: Update `tests/support/bootstrap.php` file path and add `TestCase`` class for improved testing structure (@terabytesoftw)
