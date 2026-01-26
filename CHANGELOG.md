@@ -4,6 +4,7 @@
 
 - Bug #39: Add `phpstan` type hints for `StatelessApplication` in `FrankenPHP` and `TestCase` classes (@terabytesoftw)
 - Bug #40: Update examples in `testing.md` for running Composer script with arguments (@terabytesoftw)
+- Bug #41: Update command syntax in `testing.md` to remove redundant 'run' prefix for Composer scripts (@terabytesoftw)
 
 ## 0.1.1 January 25, 2026
 
