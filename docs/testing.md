@@ -69,13 +69,13 @@ composer tests
 
 Composer scripts support forwarding additional arguments using `--`.
 
-Example: run PHPUnit with code coverage report generation:
+Run PHPUnit with code coverage report generation.
 
 ```bash
 composer tests -- --coverage-html code_coverage
 ```
 
-Example: run PHPStan with a different memory limit:
+Run PHPStan with a different memory limit.
 
 ```bash
 composer static -- --memory-limit=512M

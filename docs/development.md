@@ -8,7 +8,7 @@ To keep configuration files synchronized with the latest template updates, use t
 downloads the latest configuration files from the template repository.
 
 ```bash
-composer run sync-metadata
+composer sync-metadata
 ```
 
 ### Updated Files
