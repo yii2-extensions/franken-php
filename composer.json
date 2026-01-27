@@ -21,7 +21,7 @@
         "phpstan/phpstan-strict-rules": "^2.0.3",
         "phpunit/phpunit": "^10.5",
         "xepozz/internal-mocker": "^1.4",
-        "yii2-extensions/phpstan": "^0.3"
+        "yii2-extensions/phpstan": "^0.4"
     },
     "autoload": {
         "psr-4": {
