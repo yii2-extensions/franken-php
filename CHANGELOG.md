@@ -6,6 +6,7 @@
 - Bug #40: Update examples in `testing.md` for running Composer script with arguments (@terabytesoftw)
 - Bug #41: Update command syntax in `testing.md` to remove redundant 'run' prefix for Composer scripts (@terabytesoftw)
 - Bug #42: Update command syntax in `development.md` and `testing.md` for clarity and consistency (@terabytesoftw)
+- Bug #44: Update Rector command in `composer.json` to remove unnecessary 'src' argument (@terabytesoftw)
 
 ## 0.1.1 January 25, 2026
 
