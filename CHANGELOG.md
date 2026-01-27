@@ -1,5 +1,7 @@
 # ChangeLog
 
+## 0.1.3 Under development
+
 ## 0.1.2 January 27, 2026
 
 - Bug #39: Add `phpstan` type hints for `StatelessApplication` in `FrankenPHP` and `TestCase` classes (@terabytesoftw)
