@@ -4,4 +4,3 @@ paths:
     ignore:
       - '"pull_request" section is alias node but mapping node is expected'
       - '"push" section is alias node but mapping node is expected'
-      - "section is alias node but mapping node is expected"
