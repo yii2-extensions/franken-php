@@ -1,6 +1,6 @@
 # ChangeLog
 
-## 0.1.2 Under development
+## 0.1.2 January 27, 2026
 
 - Bug #39: Add `phpstan` type hints for `StatelessApplication` in `FrankenPHP` and `TestCase` classes (@terabytesoftw)
 - Bug #40: Update examples in `testing.md` for running Composer script with arguments (@terabytesoftw)
