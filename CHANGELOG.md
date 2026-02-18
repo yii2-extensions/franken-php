@@ -2,6 +2,8 @@
 
 ## 0.1.3 Under development
 
+- Bug #45: Rename PSR bridge references `yii2-extensions/psr-bridge` from `StatelessApplication` to `Application` in across code and documentation (@terabytesoftw)
+
 ## 0.1.2 January 27, 2026
 
 - Bug #39: Add `phpstan` type hints for `StatelessApplication` in `FrankenPHP` and `TestCase` classes (@terabytesoftw)

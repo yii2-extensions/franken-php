@@ -8,25 +8,9 @@ use Closure;
 use Throwable;
 
 /**
- * Mocks system HTTP functions for emitter and header testing with controlled state and inspection.
+ * Stateful stub for internal HTTP-related functions used by tests.
  *
- * Provides controlled replacements for core PHP HTTP header and response functions to facilitate testing of HTTP
- * emitter and response-related code without actual header output or side effects.
- *
- * This class allows tests to simulate and inspect HTTP header operations, response codes, and output flushing by
- * maintaining internal state and exposing methods to manipulate and query that state.
- *
- * Enables validation of emitter logic, header management, and response code handling in isolation from PHP global
- * state.
- *
- * Key features.
- * - No actual header output or side effects; all state is internal and queryable.
- * - Simulation of {@see frankenphp_handle_request} for controlled handler invocation and return value management.
- * - Simulation of {@see headers_sent}, {@see ob_get_length}, {@see ob_get_level} for output buffer and header state
- *   inspection.
- * - Simulation of {@see ignore_user_abort} for controlled user abort behavior testing.
- * - State reset and configuration for repeatable, isolated test runs.
- * - Tracking of handler calls, handlers, and exception throwing for test scenarios.
+ * Provides deterministic replacements for function calls consumed by emitter and FrankenPHP integration paths.
  *
  * @copyright Copyright (C) 2025 Terabytesoftw.
  * @license https://opensource.org/license/bsd-3-clause BSD 3-Clause License.
@@ -46,75 +30,77 @@ final class HTTPFunctions
     private static array $consecutiveReturnValues = [];
 
     /**
-     * The exception to throw if shouldThrowException is true.
+     * Exception thrown when request handling is configured to fail.
      */
     private static Throwable|null $exceptionToThrow = null;
 
     /**
-     * Tracks the number of times frankenphp_handle_request was called.
+     * Number of calls made to `frankenphp_handle_request()`.
      */
     private static int $handleRequestCallCount = 0;
 
     /**
-     * Stores the handlers passed to frankenphp_handle_request.
+     * Handlers captured from `frankenphp_handle_request()` calls.
      *
      * @var array<int, Closure(): void>
      */
     private static array $handlers = [];
 
     /**
-     * Indicates whether headers have been sent.
+     * Whether headers are reported as sent.
      */
     private static bool $headersSent = false;
 
     /**
-     * Tracks the file and line number where headers were sent.
+     * File reported by `headers_sent()`.
      */
     private static string $headersSentFile = '';
 
     /**
-     * Tracks the line number where headers were sent.
+     * Line reported by `headers_sent()`.
      */
     private static int $headersSentLine = 0;
 
     /**
-     * Tracks the number of times ignore_user_abort was called.
+     * Number of calls made to `ignore_user_abort()`.
      */
     private static int $ignoreUserAbortCallCount = 0;
 
     /**
-     * Tracks the current ignore_user_abort setting.
+     * Current setting returned by `ignore_user_abort()`.
      */
     private static int $ignoreUserAbortSetting = 0;
 
     /**
-     * Tracks the values passed to ignore_user_abort calls.
+     * Values received by `ignore_user_abort()` calls.
      *
      * @var array<int, bool|null>
      */
     private static array $ignoreUserAbortValues = [];
 
     /**
-     * Controls the return value of frankenphp_handle_request.
+     * Default return value for `frankenphp_handle_request()`.
      */
     private static bool $keepRunning = true;
 
     /**
-     * Tracks the output buffer length.
+     * Value returned by `ob_get_length()`.
      */
     private static int $obLength = 0;
 
     /**
-     * Tracks the output buffer level.
+     * Value returned by `ob_get_level()`.
      */
     private static int $obLevel = 0;
 
     /**
-     * Controls whether frankenphp_handle_request should throw an exception.
+     * Whether `frankenphp_handle_request()` throws the configured exception.
      */
     private static bool $shouldThrowException = false;
 
     /**
+     * Simulates `frankenphp_handle_request()` and records the handler invocation.
+     *
      * @phpstan-param Closure():void $handler
      */
     public static function frankenphp_handle_request(Closure $handler): bool
@@ -138,13 +124,16 @@ final class HTTPFunctions
         return self::$keepRunning;
     }
 
+    /**
+     * Returns how many times request handling was invoked.
+     */
     public static function getHandleRequestCallCount(): int
     {
         return self::$handleRequestCallCount;
     }
 
     /**
-     * Returns the handlers passed to frankenphp_handle_request.
+     * Returns handlers captured from request handling calls.
      *
      * @return array<int, Closure(): void>
      */
@@ -153,18 +142,24 @@ final class HTTPFunctions
         return self::$handlers;
     }
 
+    /**
+     * Returns how many times `ignore_user_abort()` was invoked.
+     */
     public static function getIgnoreUserAbortCallCount(): int
     {
         return self::$ignoreUserAbortCallCount;
     }
 
+    /**
+     * Returns the current `ignore_user_abort()` setting.
+     */
     public static function getIgnoreUserAbortSetting(): int
     {
         return self::$ignoreUserAbortSetting;
     }
 
     /**
-     * Returns the values passed to ignore_user_abort calls.
+     * Returns values passed to `ignore_user_abort()`.
      *
      * @return array<int, bool|null>
      */
@@ -173,6 +168,9 @@ final class HTTPFunctions
         return self::$ignoreUserAbortValues;
     }
 
+    /**
+     * Simulates `headers_sent()` and populates by-reference output arguments.
+     */
     public static function headers_sent(mixed &$file = null, mixed &$line = null): bool
     {
         $file = self::$headersSentFile;
@@ -181,6 +179,9 @@ final class HTTPFunctions
         return self::$headersSent;
     }
 
+    /**
+     * Simulates `ignore_user_abort()` state changes and returns the current setting.
+     */
     public static function ignore_user_abort(bool|null $value = null): int
     {
         self::$ignoreUserAbortCallCount++;
@@ -193,16 +194,25 @@ final class HTTPFunctions
         return self::$ignoreUserAbortSetting;
     }
 
+    /**
+     * Returns the configured output buffer length, or `false` for negative values.
+     */
     public static function ob_get_length(): int|false
     {
         return self::$obLength < 0 ? false : self::$obLength;
     }
 
+    /**
+     * Returns the configured output buffer nesting level.
+     */
     public static function ob_get_level(): int
     {
         return self::$obLevel;
     }
 
+    /**
+     * Resets all stub state to default values.
+     */
     public static function reset(): void
     {
         self::$consecutiveCallIndex = 0;
@@ -222,6 +232,9 @@ final class HTTPFunctions
         self::$shouldThrowException = false;
     }
 
+    /**
+     * Configures the return values for `headers_sent()`.
+     */
     public static function set_headers_sent(bool $value = false, string $file = '', int $line = 0): void
     {
         self::$headersSent = $value;
@@ -230,6 +243,8 @@ final class HTTPFunctions
     }
 
     /**
+     * Configures per-call return values for `frankenphp_handle_request()`.
+     *
      * @phpstan-param bool[] $values
      */
     public static function setConsecutiveReturnValues(array $values): void
@@ -238,26 +253,41 @@ final class HTTPFunctions
         self::$consecutiveCallIndex = 0;
     }
 
+    /**
+     * Sets the current `ignore_user_abort()` setting.
+     */
     public static function setIgnoreUserAbortSetting(int $setting): void
     {
         self::$ignoreUserAbortSetting = $setting;
     }
 
+    /**
+     * Sets the default return value for `frankenphp_handle_request()`.
+     */
     public static function setKeepRunning(bool $keepRunning): void
     {
         self::$keepRunning = $keepRunning;
     }
 
+    /**
+     * Sets the value returned by `ob_get_length()`.
+     */
     public static function setObLength(int $length): void
     {
         self::$obLength = $length;
     }
 
+    /**
+     * Sets the value returned by `ob_get_level()`.
+     */
     public static function setObLevel(int $level): void
     {
         self::$obLevel = $level;
     }
 
+    /**
+     * Configures whether request handling throws and which exception is used.
+     */
     public static function setShouldThrowException(bool $shouldThrow, Throwable|null $exception = null): void
     {
         self::$shouldThrowException = $shouldThrow;

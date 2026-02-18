@@ -8,24 +8,23 @@ use Throwable;
 use yii\web\IdentityInterface;
 use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
-use yii2\extensions\psrbridge\http\{ServerExitCode, StatelessApplication};
+use yii2\extensions\psrbridge\http\{Application, ServerExitCode};
 
 use function is_numeric;
 
 /**
- * FrankenPHP worker runtime integration for Yii2 Application.
+ * Runs the FrankenPHP worker loop for a Yii PSR bridge application.
  *
- * Provides a worker loop for handling HTTP requests using FrankenPHP, enabling efficient request processing and
- * seamless interoperability with PSR-7 compatible HTTP stacks in Yii2 Application.
+ * Usage example:
+ * ```php
+ * $config = require __DIR__ . '/config/web.php';
  *
- * This class manages the request lifecycle, including request creation, response emission, and application cleanup,
- * supporting configurable request limits and graceful shutdown.
+ * $runner = new \yii2\extensions\frankenphp\FrankenPHP(
+ *     new \yii2\extensions\psrbridge\http\Application($config),
+ * );
  *
- * Key features:
- * - Application cleanup and exit code management for robust worker operation.
- * - PSR-7 ServerRequest creation and SAPI response emission via dependency injection.
- * - Strict type safety and exception propagation for error handling.
- * - Worker loop for FrankenPHP runtime with request limit and keep-alive support.
+ * $runner->run();
+ * ```
  *
  * @copyright Copyright (C) 2025 Terabytesoftw.
  * @license https://opensource.org/license/bsd-3-clause BSD 3-Clause License.
@@ -50,16 +49,16 @@ final class FrankenPHP
     /**
      * Creates a new instance of the {@see FrankenPHP} class.
      *
-     * @param StatelessApplication $app Stateless Application instance.
+     * @param Application $app Application instance.
      * @param int|null $maxRequests Maximum number of requests to handle before stopping. If `null`, will try to read
-     * from `MAX_REQUESTS` env var, otherwise defaults to `1000`.
+     * from MAX_REQUESTS env var, otherwise defaults to '1000'.
      *
      * @throws Throwable if the emitter or server request creator cannot be instantiated.
      *
-     * @phpstan-param StatelessApplication<IdentityInterface> $app
+     * @phpstan-param Application<IdentityInterface> $app
      */
     public function __construct(
-        private readonly StatelessApplication $app,
+        private readonly Application $app,
         private readonly int|null $maxRequests = null,
     ) {
         $container = $this->app->container();
@@ -70,11 +69,6 @@ final class FrankenPHP
 
     /**
      * Runs the FrankenPHP worker loop for handling HTTP requests.
-     *
-     * Processes incoming HTTP requests using FrankenPHP, creating PSR-7 ServerRequest instances, emitting responses,
-     * and managing application cleanup and exit codes.
-     *
-     * The worker loop continues until the request limit is reached or a shutdown signal is received.
      *
      * @throws Throwable if an exception occurs during request handling or response emission.
      *
@@ -120,12 +114,6 @@ final class FrankenPHP
 
     /**
      * Resolves the maximum number of requests to handle before stopping the worker loop.
-     *
-     * Determines the request limit by checking the constructor argument, the 'MAX_REQUESTS' environment variable, or
-     * falling back to the default value if neither is set.
-     *
-     * This method ensures that the worker loop operates with a configurable request limit, supporting both explicit
-     * configuration and environment-based overrides for flexible deployment scenarios.
      *
      * @return int Maximum number of requests to process before stopping the worker loop.
      */

@@ -17,27 +17,14 @@ use yii\log\FileTarget;
 use yii\web\{IdentityInterface, JsonParser};
 use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
-use yii2\extensions\psrbridge\http\StatelessApplication;
+use yii2\extensions\psrbridge\http\Application;
 
 use function dirname;
 
 /**
- * Base test case providing common helpers and utilities for FrankenPHP extension tests.
+ * Base class for package integration tests.
  *
- * Provides utilities to create Yii2 stateless application instances configured for FrankenPHP testing environments.
- *
- * The test case sets up a pre-configured application with PSR-7 factories, caching, logging, and routing capabilities
- * suitable for testing FrankenPHP integration with Yii2.
- *
- * Tests that require HTTP `request`/`response` factories, stream factories, or stateless application scaffolding should
- * extend this class.
- *
- * Key features.
- * - Configures URL routing with pretty URLs and custom routing patterns.
- * - Creates `StatelessApplication` instances with a sane test configuration for FrankenPHP.
- * - Pre-configures PSR-7 factories (ResponseFactory, ServerRequestFactory, StreamFactory, UploadedFileFactory).
- * - Provides file caching and logging components for test scenarios.
- * - Sets up PSR bridge components (ServerRequestCreator, SapiEmitter) in the dependency injection container.
+ * Provides a preconfigured {@see Application} instance with Yii components and PSR-7 factory bindings.
  *
  * @copyright Copyright (C) 2025 Terabytesoftw.
  * @license https://opensource.org/license/bsd-3-clause BSD 3-Clause License.
@@ -45,6 +32,8 @@ use function dirname;
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
+     * Creates an integration-test application with default components and optional overrides.
+     *
      * @phpstan-param array{
      *   id?: string,
      *   basePath?: string,
@@ -53,9 +42,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *   runtimePath?: string,
      *   vendorPath?: string
      * } $config
-     * @phpstan-return StatelessApplication<IdentityInterface>
+     * @phpstan-return Application<IdentityInterface>
      */
-    protected function statelessApplication(array $config = []): StatelessApplication
+    protected function application(array $config = []): Application
     {
         /** @phpstan-var array<string, mixed> $configApplication */
         $configApplication = ArrayHelper::merge(
@@ -116,6 +105,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             $config,
         );
 
-        return new StatelessApplication($configApplication);
+        return new Application($configApplication);
     }
 }
