@@ -10,7 +10,7 @@
     "license": "BSD-3-Clause",
     "require": {
         "php": ">=8.1",
-        "yii2-extensions/psr-bridge": "^0.1"
+        "yii2-extensions/psr-bridge": "^0.2@dev"
     },
     "require-dev": {
         "httpsoft/http-message": "^1.1",

@@ -18,13 +18,14 @@ use function sprintf;
 use const PHP_INT_MAX;
 
 /**
- * Test suite for {@see FrankenPHP} core bridge functionality.
- *
- * Validates integration and behavior of the FrankenPHP bridge within Yii2 applications.
+ * Unit tests for the {@see FrankenPHP} worker runtime integration.
  *
  * Test coverage.
- * - Ensures correct initialization and teardown of FrankenPHP environment.
- * - Verifies HTTP function stubbing and environment variable handling.
+ * - Ensures `ignore_user_abort()` is enabled and called once per worker run.
+ * - Ensures the worker resolves MAX_REQUESTS from constructor input, environment values, and defaults.
+ * - Returns expected exit codes when the application is clean, the request limit is reached, or worker continuation
+ *   stops.
+ * - Throws exceptions when request processing fails or response headers are already sent.
  *
  * @copyright Copyright (C) 2025 Terabytesoftw.
  * @license https://opensource.org/license/bsd-3-clause BSD 3-Clause License.
@@ -42,7 +43,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::setConsecutiveReturnValues($returnValues);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         $app->setMemoryLimit(PHP_INT_MAX);
 
@@ -71,7 +72,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::setConsecutiveReturnValues($returnValues);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         $app->setMemoryLimit(PHP_INT_MAX);
 
@@ -82,7 +83,7 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             1,
             HTTPFunctions::getIgnoreUserAbortCallCount(),
-            "'ignore_user_abort' should be called exactly once, regardless of number of requests processed.",
+            "'ignore_user_abort()' should be called exactly once, regardless of number of requests processed.",
         );
         self::assertSame(
             $maxRequests,
@@ -95,9 +96,9 @@ final class FrankenPHPTest extends TestCase
     {
         HTTPFunctions::setConsecutiveReturnValues([true]);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
-        // set a very low memory limit to force 'clean()' to return 'true'
+        // set a very low memory limit to force 'clean()' to return `true`
         $app->setMemoryLimit(1);
 
         $frankenPHP = new FrankenPHP($app);
@@ -107,7 +108,7 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             1,
             HTTPFunctions::getIgnoreUserAbortCallCount(),
-            "'ignore_user_abort' should be called exactly once during 'run()'.",
+            "'ignore_user_abort()' should be called exactly once during 'run()'.",
         );
 
         $ignoreUserAbortValues = HTTPFunctions::getIgnoreUserAbortValues();
@@ -115,11 +116,11 @@ final class FrankenPHPTest extends TestCase
         self::assertCount(
             1,
             $ignoreUserAbortValues,
-            "Should have exactly one 'ignore_user_abort' call.",
+            "Should have exactly one 'ignore_user_abort()' call.",
         );
         self::assertTrue(
             $ignoreUserAbortValues[0] ?? false,
-            "'ignore_user_abort' should be called with 'true' to prevent worker script termination.",
+            "'ignore_user_abort()' should be called with 'true' to prevent worker script termination.",
         );
     }
 
@@ -127,27 +128,27 @@ final class FrankenPHPTest extends TestCase
     {
         HTTPFunctions::setConsecutiveReturnValues([true]);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
-        // set a very low memory limit to force 'clean()' to return 'true'
+        // set a very low memory limit to force 'clean()' to return `true`
         $app->setMemoryLimit(1);
 
         $frankenPHP = new FrankenPHP($app);
 
-        // initially, 'ignore_user_abort' should be disabled ('0')
+        // initially, 'ignore_user_abort()' should be disabled ('0')
         self::assertSame(
             0,
             HTTPFunctions::getIgnoreUserAbortSetting(),
-            "'ignore_user_abort' should initially be disabled.",
+            "'ignore_user_abort()' should initially be disabled.",
         );
 
         $frankenPHP->run();
 
-        // after 'run()', 'ignore_user_abort' should be enabled ('1')
+        // after 'run()', 'ignore_user_abort()' should be enabled ('1')
         self::assertSame(
             1,
             HTTPFunctions::getIgnoreUserAbortSetting(),
-            "'ignore_user_abort' should be enabled after calling 'run()'.",
+            "'ignore_user_abort()' should be enabled after calling 'run()'.",
         );
     }
 
@@ -157,7 +158,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::setConsecutiveReturnValues([true, true]);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         $app->setMemoryLimit(PHP_INT_MAX);
 
@@ -171,7 +172,7 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             2,
             HTTPFunctions::getHandleRequestCallCount(),
-            "Should process exactly '2' requests when 'MAX_REQUESTS' is string '2'.",
+            "Should process exactly '2' requests when 'MAX_REQUESTS' is '2'.",
         );
     }
 
@@ -181,7 +182,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::setConsecutiveReturnValues([true]);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         $app->setMemoryLimit(PHP_INT_MAX);
 
@@ -195,7 +196,7 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             1,
             HTTPFunctions::getHandleRequestCallCount(),
-            "Should call 'frankenphp_handle_request' exactly once when 'MAX_REQUESTS' is string '001'.",
+            "Should call 'frankenphp_handle_request()' exactly once when 'MAX_REQUESTS' is string '001'.",
         );
     }
 
@@ -209,7 +210,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::setConsecutiveReturnValues($returnValues);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         $app->setMemoryLimit(PHP_INT_MAX);
 
@@ -238,7 +239,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::setConsecutiveReturnValues($returnValues);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         $app->setMemoryLimit(PHP_INT_MAX);
 
@@ -267,9 +268,9 @@ final class FrankenPHPTest extends TestCase
     {
         HTTPFunctions::setConsecutiveReturnValues([true]);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
-        // set a very low memory limit to force 'clean()' to return 'true', current memory usage will always be
+        // set a very low memory limit to force 'clean()' to return `true`, current memory usage will always be
         // '>= 90%' of '1' byte
         $app->setMemoryLimit(1);
 
@@ -283,7 +284,7 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             1,
             HTTPFunctions::getHandleRequestCallCount(),
-            "'frankenphp_handle_request' should be called exactly once before cleanup.",
+            "'frankenphp_handle_request()' should be called exactly once before cleanup.",
         );
     }
 
@@ -291,7 +292,7 @@ final class FrankenPHPTest extends TestCase
     {
         HTTPFunctions::setKeepRunning(false);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         // set a very high memory limit to force 'clean()' to return 'false'
         $app->setMemoryLimit(PHP_INT_MAX);
@@ -306,7 +307,7 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             1,
             HTTPFunctions::getHandleRequestCallCount(),
-            "'frankenphp_handle_request' should be called exactly once before stopping.",
+            "'frankenphp_handle_request()' should be called exactly once before stopping.",
         );
     }
 
@@ -316,7 +317,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::setConsecutiveReturnValues([true, true]);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         // set a very high memory limit to force 'clean()' to return 'false', current memory usage will never be
         // '>= 90%' of 'PHP_INT_MAX'
@@ -332,7 +333,7 @@ final class FrankenPHPTest extends TestCase
         self::assertSame(
             2,
             HTTPFunctions::getHandleRequestCallCount(),
-            "'frankenphp_handle_request' should be called exactly '2' times before reaching limit.",
+            "'frankenphp_handle_request()' should be called exactly '2' times before reaching limit.",
         );
     }
 
@@ -344,7 +345,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::setConsecutiveReturnValues($returnValues);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         $app->setMemoryLimit(PHP_INT_MAX);
 
@@ -377,7 +378,7 @@ final class FrankenPHPTest extends TestCase
         $_SERVER['REQUEST_URI'] = '/site/index';
         $_SERVER['HTTP_HOST'] = 'localhost';
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         $app->setMemoryLimit(PHP_INT_MAX);
 
@@ -395,7 +396,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::setShouldThrowException(true, $testException);
 
-        $app = $this->statelessApplication();
+        $app = $this->application();
 
         $frankenPHP = new FrankenPHP($app);
 
@@ -411,7 +412,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::reset();
 
-        // clear 'MAX_REQUESTS' environment variable
+        // clear MAX_REQUESTS environment variable
         unset($_ENV['MAX_REQUESTS']);
     }
 
@@ -421,7 +422,7 @@ final class FrankenPHPTest extends TestCase
 
         HTTPFunctions::reset();
 
-        // clear 'MAX_REQUESTS' environment variable
+        // clear MAX_REQUESTS environment variable
         unset($_ENV['MAX_REQUESTS']);
     }
 }
