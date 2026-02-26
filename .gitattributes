@@ -21,10 +21,6 @@
 *.gif  binary
 *.ttf  binary
 
-# Avoid merge conflicts in CHANGELOG
-# https://about.gitlab.com/2015/02/10/gitlab-reduced-merge-conflicts-by-90-percent-with-changelog-placeholders/
-/CHANGELOG.md		merge=union
-
 # Exclude files from the archive
 /.editorconfig                  export-ignore
 /.gitattributes                 export-ignore
@@ -38,7 +34,10 @@
 /infection.json*                export-ignore
 /phpstan*.neon*                 export-ignore
 /phpunit.xml.dist               export-ignore
-/psalm.xml                      export-ignore
 /rector.php                     export-ignore
 /runtime                        export-ignore
 /tests                          export-ignore
+
+# Avoid merge conflicts in CHANGELOG
+# https://about.gitlab.com/2015/02/10/gitlab-reduced-merge-conflicts-by-90-percent-with-changelog-placeholders/
+/CHANGELOG.md merge=union

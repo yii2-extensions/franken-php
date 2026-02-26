@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace yii2\extensions\frankenphp;
 
 use Throwable;
+use Yii;
 use yii\web\IdentityInterface;
 use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
@@ -61,10 +62,9 @@ final class FrankenPHP
         private readonly Application $app,
         private readonly int|null $maxRequests = null,
     ) {
-        $container = $this->app->container();
-
-        $this->emitter = $container->get(SapiEmitter::class);
-        $this->serverRequestCreator = $container->get(ServerRequestCreator::class);
+        $app->bootstrapContainer();
+        $this->emitter = Yii::$container->get(SapiEmitter::class);
+        $this->serverRequestCreator = Yii::$container->get(ServerRequestCreator::class);
     }
 
     /**
