@@ -38,34 +38,15 @@ final class FrankenPHP
     public const DEFAULT_MAX_REQUESTS = 1000;
 
     /**
-     * Emitter for PSR-7 responses to the SAPI.
-     */
-    private readonly SapiEmitter $emitter;
-
-    /**
-     * ServerRequestCreator for creating PSR-7 ServerRequest instances from global variables.
-     */
-    private readonly ServerRequestCreator $serverRequestCreator;
-
-    /**
      * Creates a new instance of the {@see FrankenPHP} class.
      *
      * @param Application $app Application instance.
      * @param int|null $maxRequests Maximum number of requests to handle before stopping. If `null`, will try to read
      * from MAX_REQUESTS env var, otherwise defaults to '1000'.
      *
-     * @throws Throwable if the emitter or server request creator cannot be instantiated.
-     *
      * @phpstan-param Application<IdentityInterface> $app
      */
-    public function __construct(
-        private readonly Application $app,
-        private readonly int|null $maxRequests = null,
-    ) {
-        $app->bootstrapContainer();
-        $this->emitter = Yii::$container->get(SapiEmitter::class);
-        $this->serverRequestCreator = Yii::$container->get(ServerRequestCreator::class);
-    }
+    public function __construct(private readonly Application $app, private readonly int|null $maxRequests = null) {}
 
     /**
      * Runs the FrankenPHP worker loop for handling HTTP requests.
@@ -81,8 +62,8 @@ final class FrankenPHP
         ignore_user_abort(true);
 
         $app = $this->app;
-        $emitter = $this->emitter;
-        $serverRequestCreator = $this->serverRequestCreator;
+        $emitter = Yii::$container->get(SapiEmitter::class);
+        $serverRequestCreator = Yii::$container->get(ServerRequestCreator::class);
 
         $handler = static function () use ($app, $emitter, $serverRequestCreator): void {
             try {
