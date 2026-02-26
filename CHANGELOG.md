@@ -3,7 +3,7 @@
 ## 0.3.0 Under development
 
 - Bug #47: Update `FrankenPHP` constructor to `bootstrapContainer()` before worker instantiation (@terabytesoftw)
-- Bug #48: Move PSR7 resolution to `FrankenPHP::run()` method and remove application container bootstrapping from the runner loop to keep application initialization inside `Application` class
+- Bug #48: Move PSR7 resolution to `FrankenPHP::run()` method and remove application container bootstrapping from the runner loop to keep application initialization inside `Application` class (@terabytesoftw)
 
 ## 0.2.0 February 20, 2026
 
