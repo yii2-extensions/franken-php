@@ -28,6 +28,9 @@ package-lock.json
 # phpstorm project (if present)
 .idea
 
+# phpactor (if present)
+.phpactor.*
+
 # phpunit (if present)
 .phpunit.cache
 .phpunit.result.cache

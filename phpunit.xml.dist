@@ -15,7 +15,7 @@
   </extensions>
 
   <testsuites>
-    <testsuite name="FrankenPHP">
+    <testsuite name="Yii2Extensions-FrankenPHP">
       <directory>tests</directory>
     </testsuite>
   </testsuites>
