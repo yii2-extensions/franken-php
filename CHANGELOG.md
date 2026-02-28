@@ -1,5 +1,7 @@
 # ChangeLog
 
+## 0.3.1 Under development
+
 ## 0.3.0 February 28, 2026
 
 - Bug #47: Update `FrankenPHP` constructor to `bootstrapContainer()` before worker instantiation (@terabytesoftw)
