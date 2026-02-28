@@ -1,16 +1,20 @@
 {
     "name": "yii2-extensions/franken-php",
     "type": "library",
-    "description": "Yii2 FrankenPHP runtime.",
+    "description": "Supercharge your Yii2 applications with FrankenPHP blazing-fast HTTP server.",
     "keywords": [
         "yii2-extension",
         "frankenphp",
-        "runtime"
+        "runtime",
+        "http2",
+        "http3",
+        "worker-mode",
+        "performance"
     ],
     "license": "BSD-3-Clause",
     "require": {
         "php": ">=8.1",
-        "yii2-extensions/psr-bridge": "^0.3@dev"
+        "yii2-extensions/psr-bridge": "^0.3"
     },
     "require-dev": {
         "httpsoft/http-message": "^1.1",
@@ -43,7 +47,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "0.3.x-dev"
+            "dev-main": "0.4.x-dev"
         }
     },
     "scripts": {
