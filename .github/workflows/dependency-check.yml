@@ -18,4 +18,4 @@ permissions:
 
 jobs:
   composer-require-checker:
-    uses: yii2-framework/actions/.github/workflows/composer-require-checker.yml@v1
+    uses: yii2-framework/actions/.github/workflows/composer-require-checker.yml@v2
