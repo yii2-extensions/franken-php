@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   mutation:
-    uses: yii2-framework/actions/.github/workflows/infection.yml@v1
+    uses: yii2-framework/actions/.github/workflows/infection.yml@v2
     with:
       phpstan: true
     secrets:
