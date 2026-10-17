@@ -43,43 +43,51 @@ Explore the ready-to-run Yii2 + FrankenPHP application template.
 ### Installation
 
 ```bash
-composer require yii2-extensions/franken-php:^0.3
+composer require yii2-extensions/franken-php:^0.4@dev httpsoft/http-message
 ```
 
 ### Quick start
 
-Create your FrankenPHP entry point (`web/index.php`)
+Create `web/index.php` in an existing Yii application with its routes and secret `request.cookieValidationKey`
+already configured.
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-// disable PHP automatic session cookie handling
-ini_set('session.use_cookies', '0');
-
-require_once dirname(__DIR__) . '/vendor/autoload.php';
-
+use HttpSoft\Message\{ResponseFactory, ServerRequestFactory, StreamFactory, UploadedFileFactory};
+use Psr\Http\Message\{
+    ResponseFactoryInterface,
+    ServerRequestFactoryInterface,
+    StreamFactoryInterface,
+    UploadedFileFactoryInterface,
+};
 use yii2\extensions\frankenphp\FrankenPHP;
 use yii2\extensions\psrbridge\http\Application;
 
-// Load environment variables from .env file
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->safeLoad();
+ini_set('session.use_cookies', '0');
 
-// production default (change to 'true' for development)
-define('YII_DEBUG', $_ENV['YII_DEBUG'] ?? false);
-// production default (change to 'dev' for development)
-define('YII_ENV', $_ENV['YII_ENV'] ?? 'prod');
+define('YII_DEBUG', filter_var(getenv('YII_DEBUG'), FILTER_VALIDATE_BOOLEAN));
+define('YII_ENV', getenv('YII_ENV') ?: 'prod');
 
-require_once dirname(__DIR__) . '/vendor/yiisoft/yii2/Yii.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/yiisoft/yii2/Yii.php';
 
-$config = require_once dirname(__DIR__) . '/config/web.php';
+$config = require dirname(__DIR__) . '/config/web.php';
+
+$config['container']['definitions'][ResponseFactoryInterface::class] = ResponseFactory::class;
+$config['container']['definitions'][ServerRequestFactoryInterface::class] = ServerRequestFactory::class;
+$config['container']['definitions'][StreamFactoryInterface::class] = StreamFactory::class;
+$config['container']['definitions'][UploadedFileFactoryInterface::class] = UploadedFileFactory::class;
 
 $runner = new FrankenPHP(new Application($config));
-
 $runner->run();
 ```
+
+The runner emits each PSR response and then completes the bridge's `finalize()` lifecycle exactly once. HEAD omits
+the response body. Keep request-scoped components out of `persistentComponents`; lazy sessions remain isolated
+when `useSession=false`. See [configuration](docs/configuration.md) and [worker examples](docs/examples.md).
 
 ### FrankenPHP configuration
 
@@ -105,7 +113,7 @@ localhost {
 
     root ./web
 
-    # compatibility headers to enable X-Sendfile support in PHP frameworks (Yii2/Symfony)
+    # request hints for frameworks that consume X-Sendfile-Type and X-Accel-Mapping
     # see: https://github.com/php/frankenphp/blob/main/docs/x-sendfile.md
     request_header X-Sendfile-Type x-accel-redirect
     request_header X-Accel-Mapping ../private-files=/private-files
@@ -132,26 +140,25 @@ localhost {
 > For local development, consider using [mkcert](https://github.com/FiloSottile/mkcert) to generate trusted local certificates.  
 > If you want to use Caddy's automatic self-signed certificates for local development, you can remove this line.
 
+For Yii, select the response header explicitly. The URI is relative to the interceptor's `private-files/` root:
+
+```php
+return Yii::$app->response->xSendFile('/report.pdf', 'report.pdf', ['xHeader' => 'X-Accel-Redirect']);
+```
+
+This serves `private-files/report.pdf`. Authorize access and select the file on the server before returning the
+response. Yii's default `X-Sendfile` response header is not matched by this interceptor.
+
 ### Standalone Binary
 
-We provide static FrankenPHP binaries for Linux and macOS containing [PHP 8.4](https://www.php.net/releases/8.4/en.php)
-and most popular PHP extensions.
-
-On Windows, use [WSL](https://learn.microsoft.com/windows/wsl/) to run FrankenPHP.
-
-[Download FrankenPHP](https://github.com/php/frankenphp/releases) or copy this line into your terminal to automatically
-install the version appropriate for your platform.
+Install a worker-capable binary following the [official FrankenPHP instructions](https://frankenphp.dev/docs/),
+then run from the application root:
 
 ```bash
-curl https://frankenphp.dev/install.sh | sh
-mv frankenphp /usr/local/bin/
+frankenphp run --config Caddyfile --watch
 ```
 
-To run your application, you can use the following command.
-
-```bash
-./frankenphp run --config ./Caddyfile --watch
-```
+On Windows, use [WSL](https://learn.microsoft.com/windows/wsl/).
 
 ### Docker
 
@@ -235,44 +242,38 @@ if (YII_ENV_DEV) {
 
 ### File Upload Handling
 
-For enhanced file upload support in worker environments, use the PSR-7 bridge UploadedFile class instead of the standard
-Yii2 implementation.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use yii2\extensions\psrbridge\http\{Response, UploadedFile};
-
-final class FileController extends \yii\web\Controller
-{
-    public function actionUpload(): Response
-    {
-        $file = UploadedFile::getInstanceByName('avatar');
-
-        if ($file !== null && $file->error === UPLOAD_ERR_OK) {
-            $file->saveAs('@webroot/uploads/' . $file->name);
-        }
-
-        return $this->asJson(['status' => 'uploaded']);
-    }
-}
-```
+Use `yii2\extensions\psrbridge\http\UploadedFile` in the application's upload model. Validate file content and size,
+use a server-generated storage name, and check `saveAs()` before reporting success. See
+[uploads and streaming downloads](docs/examples.md#uploads-and-streaming-downloads).
 
 ## Documentation
 
-For detailed configuration options and advanced usage.
+Practical guides and complete worker examples for FrankenPHP and request
+isolation.
 
 - 📚 [Installation Guide](docs/installation.md)
-- ⚙️ [Configuration Reference](docs/configuration.md)
+- ⚙️ [Configuration Guide](docs/configuration.md)
+- 💡 [Worker Examples](docs/examples.md)
+- 🔄 [Upgrade Guide](UPGRADE.md) and [Migration Checks](docs/migration.md)
 - 🧪 [Testing Guide](docs/testing.md)
-- 🛠️ [Development Guide](docs/development.md)
+
+## AI assistance
+
+AI agents: use the repository guides and source for the installed revision.
+For a [documentation deployment](https://yii2-framework.github.io/docs/) with
+`llms.txt`, read that index first. When Markdown export is enabled, append
+`index.md` to a page URL. For Yii conventions, use the `yii2-framework` skill
+from a local framework documentation checkout.
+
+- 🤖 [yii2-frankenphp-worker skill](docs/agents.md): factories and isolation.
+
+If the hosted sources are unavailable, use the repository guides and locally
+available skills.
 
 ## Package information
 
-[![PHP](https://img.shields.io/badge/%3E%3D8.1-777BB4.svg?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/releases/8.1/en.php)
-[![Yii 2.0.x](https://img.shields.io/badge/2.0.53-0073AA.svg?style=for-the-badge&logo=yii&logoColor=white)](https://github.com/yiisoft/yii2/tree/2.0.53)
+[![PHP](https://img.shields.io/badge/%3E%3D8.3-777BB4.svg?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/releases/8.3/en.php)
+[![Yii 2.0.55+](https://img.shields.io/badge/%3E%3D2.0.55-0073AA.svg?style=for-the-badge&logo=yii&logoColor=white)](https://github.com/yiisoft/yii2/releases/tag/2.0.55)
 [![Yii 22.0.x](https://img.shields.io/badge/22.0.x-0073AA.svg?style=for-the-badge&logo=yii&logoColor=white)](https://github.com/yiisoft/yii2/tree/22.0)
 [![Latest Stable Version](https://img.shields.io/packagist/v/yii2-extensions/franken-php.svg?style=for-the-badge&logo=packagist&logoColor=white&label=Stable)](https://packagist.org/packages/yii2-extensions/franken-php)
 [![Total Downloads](https://img.shields.io/packagist/dt/yii2-extensions/franken-php.svg?style=for-the-badge&logo=composer&logoColor=white&label=Downloads)](https://packagist.org/packages/yii2-extensions/franken-php)

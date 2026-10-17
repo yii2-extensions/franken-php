@@ -41,3 +41,11 @@
 # Avoid merge conflicts in CHANGELOG
 # https://about.gitlab.com/2015/02/10/gitlab-reduced-merge-conflicts-by-90-percent-with-changelog-placeholders/
 /CHANGELOG.md merge=union
+
+# Private maintenance and client discovery aliases
+/internal                       export-ignore
+/examples                       export-ignore
+/.agents                        export-ignore
+/.claude                        export-ignore
+/AGENTS.md                      export-ignore
+/.markdownlint.json             export-ignore
