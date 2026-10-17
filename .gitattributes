@@ -48,4 +48,3 @@
 /.agents                        export-ignore
 /.claude                        export-ignore
 /AGENTS.md                      export-ignore
-/.markdownlint.json             export-ignore

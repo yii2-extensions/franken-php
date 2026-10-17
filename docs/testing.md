@@ -27,7 +27,8 @@ restarts. Record the runtime version and distinguish this evidence from mocked u
 Run the installed format tools over edited guides and skill files:
 
 ```bash
-markdownlint-cli2 README.md UPGRADE.md AGENTS.md 'docs/*.md' 'skills/**/SKILL.md'
+markdownlint-cli2 --config .github/linters/.markdown-lint.yml \
+    README.md UPGRADE.md AGENTS.md 'docs/*.md' 'skills/**/SKILL.md'
 prettier --check README.md UPGRADE.md AGENTS.md 'docs/*.md' 'skills/**/SKILL.md'
 editorconfig-checker
 ```

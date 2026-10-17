@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 0.4.1 Under development
 
+- ci: update markdown linting configuration and remove obsolete files,
+
 ## 0.4.0 October 17, 2026
 
 - fix: complete the Yii/PSR lifecycle; update PHP/Yii and tooling requirements, require stable PSR Bridge 0.4, keep worker examples private, and fix HEAD, worker, skill, docs, and CI.
