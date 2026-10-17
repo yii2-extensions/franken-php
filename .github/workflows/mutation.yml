@@ -14,12 +14,14 @@ name: mutation test
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
   mutation:
-    uses: yii2-framework/actions/.github/workflows/infection.yml@v1
+    uses: yii2-framework/actions/.github/workflows/infection.yml@a28eb7d4ab03abd53ccd7c79014b3b27d09932ff
     with:
+      command-options: --threads=2 --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100
+      php-ini-values: date.timezone=UTC, memory_limit=-1
+      php-version: '["8.3"]'
       phpstan: true
     secrets:
       STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}

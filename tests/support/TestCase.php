@@ -11,6 +11,7 @@ use Psr\Http\Message\{
     StreamFactoryInterface,
     UploadedFileFactoryInterface,
 };
+use Yii;
 use yii\caching\FileCache;
 use yii\helpers\ArrayHelper;
 use yii\log\FileTarget;
@@ -25,6 +26,7 @@ use function dirname;
  * Base class for package integration tests.
  *
  * Provides a preconfigured {@see WorkerApplication} instance with Yii components and PSR-7 factory bindings.
+ * Restores Yii error handlers after each test.
  */
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
@@ -95,5 +97,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         );
 
         return new WorkerApplication($configApplication);
+    }
+
+    protected function tearDown(): void
+    {
+        if (Yii::$app !== null && Yii::$app->has('errorHandler', true)) {
+            Yii::$app->getErrorHandler()->unregister();
+        }
+
+        parent::tearDown();
     }
 }

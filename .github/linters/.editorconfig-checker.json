@@ -1,0 +1,11 @@
+{
+    "Exclude": [
+        "^\\.agents/",
+        "^\\.claude/",
+        "^internal/",
+        "^code_coverage/",
+        "^composer\\.lock$",
+        "^runtime/",
+        "^vendor/"
+    ]
+}

@@ -17,8 +17,21 @@ permissions:
 
 jobs:
   phpunit:
-    uses: yii2-framework/actions/.github/workflows/phpunit.yml@v1
+    uses: yii2-framework/actions/.github/workflows/phpunit.yml@a28eb7d4ab03abd53ccd7c79014b3b27d09932ff
     with:
+      composer-command: require yiisoft/yii2:22.0.x-dev
+      concurrency-group: phpunit-${{ github.workflow }}-${{ github.ref }}
+      extensions: mbstring
+      php-version: '["8.3","8.4","8.5"]'
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  phpunit-compatibility:
+    uses: yii2-framework/actions/.github/workflows/phpunit.yml@a28eb7d4ab03abd53ccd7c79014b3b27d09932ff
+    with:
+      composer-command: require yiisoft/yii2:2.0.55
+      concurrency-group: phpunit-compatibility-${{ github.workflow }}-${{ github.ref }}
+      extensions: mbstring
       php-version: '["8.3","8.4","8.5"]'
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
