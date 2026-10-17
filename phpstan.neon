@@ -2,6 +2,8 @@ includes:
     - phar://phpstan.phar/conf/bleedingEdge.neon
 
 parameters:
+    phpVersion: 80300
+
     bootstrapFiles:
         - tests/support/bootstrap.php
 

@@ -1,135 +1,57 @@
 # Installation guide
 
-## System requirements
+Use a [FrankenPHP worker runtime](https://frankenphp.dev/docs/worker/) with PHP 8.3+ and the `filter` and `mbstring`
+extensions. The adapter supports Yii `~2.0.55 || ^22.0@dev`. The selected framework and other dependencies may
+require a newer PHP version.
 
-- [`PHP`](https://www.php.net/downloads) 8.1 or higher.
-- [`Composer`](https://getcomposer.org/download/) for dependency management.
-- [`FrankenPHP`](https://github.com/dunglas/frankenphp) 1.2.0 or higher.
-- [`OpenSSL`](https://www.openssl.org/) for HTTPS support.
-- [`Yii2`](https://github.com/yiisoft/yii2) 2.0.53+ or 22.x.
+## Install the packages
 
-### PSR-7/PSR-17 HTTP Message Factories
-
-Install exactly one of the following PSR-7/PSR-17 HTTP message implementations.
-
-- [`guzzlehttp/psr7`](https://github.com/guzzle/psr7)
-- [`httpsoft/http-message`](https://github.com/httpsoft/http-message)
-- [`laminas/laminas-diactoros`](https://github.com/laminas/laminas-diactoros)
-- [`nyholm/psr7`](https://github.com/Nyholm/psr7)
-
-For example, install HttpSoft (recommended for Yii2 applications).
+Install the adapter and a PSR-7/PSR-17 implementation:
 
 ```bash
-composer require httpsoft/http-message
+composer require yii2-extensions/franken-php:^0.4@dev httpsoft/http-message
 ```
 
-## Installation
+Retain the resolved versions in the application's `composer.lock`. See [UPGRADE](../UPGRADE.md) when changing an
+existing worker. The adapter has no frontend assets and requires no asset manager.
 
-### Method 1: Using [Composer](https://getcomposer.org/download/) (recommended)
+HttpSoft supplies the factories in the [quick start](../README.md#quick-start). Another PSR-7/PSR-17
+implementation can be used by changing all four factory bindings. Composer installs the PHP adapter; obtain the
+server separately using the [official FrankenPHP installation instructions](https://frankenphp.dev/docs/).
 
-Install the extension.
+## Configure the worker
 
-```bash
-composer require yii2-extensions/franken-php:^0.3
-```
+Create `web/index.php` using the [quick start](../README.md#quick-start). It expects the application's `config/web.php`,
+including its routes, components, and a secret `request.cookieValidationKey`. Keep cookie and CSRF validation
+appropriate to the application; worker mode does not remove their purpose. Set `YII_DEBUG=1` only for development.
 
-### Method 2: Manual installation
-
-Add to your `composer.json`.
-
-```json
-{
-    "require": {
-        "yii2-extensions/franken-php": "^0.3"
-    }
-}
-```
-
-Then run.
-
-```bash
-composer update
-```
-
-### FrankenPHP configuration
-
-Create `Caddyfile` in your project root (worker mode).
+Create a `Caddyfile` in the application root:
 
 ```caddyfile
 {
-    auto_https off
-    admin localhost:2019
-
     frankenphp {
-        worker ./index.php
+        worker ./web/index.php
     }
 }
 
 localhost {
-    log
-
-    encode zstd br gzip
-
-    root {$SERVER_ROOT:public/}
-
-    request_header X-Sendfile-Type x-accel-redirect
-    request_header X-Accel-Mapping ../private-files=/private-files
-
-    intercept {
-        @sendfile header X-Accel-Redirect *
-        handle_response @sendfile {
-            root private-files/
-            rewrite * {resp.header.X-Accel-Redirect}
-            method * GET
-            header -X-Accel-Redirect
-            file_server
-        }
-    }
-
-    php_server {
-        try_files {path} index.php
-    }
+    root * ./web
+    php_server
 }
 ```
 
-### Install FrankenPHP binary
-
-We provide static FrankenPHP binaries for Linux and macOS containing [PHP 8.4](https://www.php.net/releases/8.4/en.php)
-and most popular PHP extensions.
-
-On Windows, use [WSL](https://learn.microsoft.com/windows/wsl/) to run FrankenPHP.
-
-[Download FrankenPHP](https://github.com/php/frankenphp/releases) or copy this line into your terminal to automatically
-install the version appropriate for your platform.
+Run from that root:
 
 ```bash
-curl https://frankenphp.dev/install.sh | sh
-mv frankenphp /usr/local/bin/
+frankenphp run --config Caddyfile
 ```
 
-To run your application, you can use the following command.
-
-```bash
-cd web
-./frankenphp php-server --worker index.php
-```
-
-## Project structure
-
-Organize your project for FrankenPHP:
-
-```text
-app-basic/
-├── web/
-│   └── index.php          # FrankenPHP entry point
-├── Caddyfile              # FrankenPHP configuration
-├── frankenphp.yaml        # Alternative YAML config (optional)
-└── frankenphp             # FrankenPHP binary
-```
+For development watching, TLS, Docker, and optional X-Sendfile delivery, see the [README](../README.md) and the
+[FrankenPHP configuration reference](https://frankenphp.dev/docs/config/). Pin the runtime version in your deployment.
 
 ## Next steps
 
-Once the installation is complete.
-
-- ⚙️ [Configuration Reference](configuration.md)
-- 🧪 [Testing Guide](testing.md)
+- [Configuration and lifecycle](configuration.md)
+- [Worker examples](examples.md)
+- [Migration checks](migration.md)
+- [Testing](testing.md)

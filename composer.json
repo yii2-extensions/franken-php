@@ -12,20 +12,29 @@
         "performance"
     ],
     "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Wilmer Arambula",
+            "email": "terabytesoftw@gmail.com",
+            "homepage": "https://github.com/terabytesoftw",
+            "role": "Developer"
+        }
+    ],
     "require": {
-        "php": ">=8.1",
-        "yii2-extensions/psr-bridge": "^0.3"
+        "php": ">=8.3",
+        "yii2-extensions/psr-bridge": "^0.4",
+        "yiisoft/yii2": "~2.0.55 || ^22.0@dev"
     },
     "require-dev": {
         "httpsoft/http-message": "^1.1",
-        "infection/infection": "^0.27|^0.32",
-        "maglnet/composer-require-checker": "^4.1",
-        "php-forge/coding-standard": "^0.1",
+        "infection/infection": "^0.35",
+        "maglnet/composer-require-checker": "^4.20",
+        "php-forge/coding-standard": "^0.3.3",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan-strict-rules": "^2.0.3",
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "^12.5",
         "xepozz/internal-mocker": "^1.4",
-        "yii2-extensions/phpstan": "^0.4"
+        "yii2-extensions/phpstan": "^0.5"
     },
     "autoload": {
         "psr-4": {
@@ -53,19 +62,13 @@
     "scripts": {
         "check-dependencies": "./vendor/bin/composer-require-checker check",
         "ecs": "./vendor/bin/ecs --fix",
-        "mutation": "./vendor/bin/infection --threads=4 --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100",
-        "mutation-static": "./vendor/bin/infection --threads=4 --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100 --static-analysis-tool=phpstan --static-analysis-tool-options='--memory-limit=-1'",
+        "mutation": "php -d memory_limit=-1 vendor/bin/infection --threads=4 --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100",
+        "mutation-static": [
+            "Composer\\Config::disableProcessTimeout",
+            "php -d memory_limit=-1 vendor/bin/infection --initial-tests-php-options='-d memory_limit=-1' --test-framework-extra-args='-d memory_limit=-1' --threads=4 --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100 --static-analysis-tool=phpstan --static-analysis-tool-options='--memory-limit=-1'"
+        ],
         "rector": "./vendor/bin/rector process",
         "static": "./vendor/bin/phpstan --memory-limit=-1",
-        "sync-metadata": [
-            "curl -fsSL -o .editorconfig https://raw.githubusercontent.com/yii2-extensions/template/main/.editorconfig",
-            "curl -fsSL -o .gitattributes https://raw.githubusercontent.com/yii2-extensions/template/main/.gitattributes",
-            "curl -fsSL -o .gitignore https://raw.githubusercontent.com/yii2-extensions/template/main/.gitignore",
-            "curl -fsSL -o .styleci.yml https://raw.githubusercontent.com/yii2-extensions/template/main/.styleci.yml",
-            "curl -fsSL -o infection.json5 https://raw.githubusercontent.com/yii2-extensions/template/main/infection.json5",
-            "curl -fsSL -o phpstan.neon https://raw.githubusercontent.com/yii2-extensions/template/main/phpstan.neon",
-            "curl -fsSL -o phpunit.xml.dist https://raw.githubusercontent.com/yii2-extensions/template/main/phpunit.xml.dist"
-        ],
         "tests": "./vendor/bin/phpunit"
     },
     "repositories": [

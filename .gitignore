@@ -52,3 +52,10 @@ Thumbs.db
 .buildpath
 .project
 .settings
+
+# private maintenance and generated runtime data
+/internal/
+/examples/
+/runtime/
+/.agents/
+/.claude/

@@ -14,8 +14,7 @@ name: ecs
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
   easy-coding-standard:
-    uses: yii2-framework/actions/.github/workflows/ecs.yml@v1
+    uses: yii2-framework/actions/.github/workflows/ecs.yml@a28eb7d4ab03abd53ccd7c79014b3b27d09932ff

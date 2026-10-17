@@ -5,6 +5,24 @@
 This guide covers all configuration options for the FrankenPHP extension, from basic setup to advanced production
 scenarios.
 
+## Response lifecycle and request isolation
+
+The runner resolves the bridge creator and emitter from `Yii::$container` after the application has applied its
+container configuration. Bind PSR response, server request, stream, and uploaded file factories as shown in
+the [quick start](../README.md#quick-start).
+
+For each native request, the runner creates the PSR request, calls `Application::handle()`, emits the result, and
+calls `Application::finalize(success)` once in `finally`. After-send runs only when emission succeeds, including
+HEAD responses whose bodies are suppressed. An after-send exception propagates without a second finalization.
+Keep download streams open until emission completes. Do not add another finalizer or call Yii `Response::send()`.
+
+`useSession=false` skips eager session open/close around bootstrap, while the bridge still isolates session IDs for
+lazy access. Retain cookie validation and configure its secret. Keep request, response, error handler, session,
+and user out of `persistentComponents`. Upload state is reset on every request.
+
+See [worker examples](examples.md) for request limits, memory, sessions, uploads, and streaming, and
+[migration checks](migration.md) before changing an existing worker.
+
 ## Basic configuration
 
 ### Constructor parameters
@@ -30,7 +48,7 @@ Configure automatic worker restart based on memory usage.
 ```php
 $app = new Application($config);
 
-// set memory limit in bytes (default: 128MB)
+// override the threshold read from PHP memory_limit
 $app->setMemoryLimit(256 * 1024 * 1024); // 256MB
 
 $runner = new FrankenPHP($app);
@@ -266,7 +284,6 @@ use Psr\Http\Message\{
     UploadedFileFactoryInterface,
 };
 use yii\caching\FileCache;
-use yii\di\Instance;
 use yii\log\FileTarget;
 use yii\gii\Module;
 use yii\symfonymailer\Mailer;
@@ -294,6 +311,7 @@ $config = [
             'class' => FileCache::class,
         ],
         'user' => [
+            'identityClass' => User::class,
             'enableAutoLogin' => false, // disable auto-login for stateless application
         ],
         'errorHandler' => [

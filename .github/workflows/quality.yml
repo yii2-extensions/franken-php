@@ -1,0 +1,63 @@
+---
+on:
+  - pull_request
+  - push
+
+name: quality
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    uses: yii2-framework/actions/.github/workflows/quality.yml@a28eb7d4ab03abd53ccd7c79014b3b27d09932ff
+    with:
+      codespell-config: .github/linters/.codespellrc
+      editorconfig-checker-config: .github/linters/.editorconfig-checker.json
+      markdownlint-config: .markdownlint.json
+      markdownlint-globs: |
+        **/*.md
+        #internal/**
+        #vendor/**
+        #runtime/**
+        #.agents/**
+        #.claude/**
+      prettier-config: .prettierrc.json
+      prettier-ignore-path: .prettierignore
+      prettier-patterns: "**/*.{md,yml,yaml,json,json5}"
+      yamllint-targets: |
+        .github
+        .styleci.yml
+
+  xml:
+    name: XML and SVG
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: xml-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout repository.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python.
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.x"
+
+      - name: Validate XML and SVG files.
+        run: |
+          python - <<'PY'
+          import os
+          import subprocess
+          import xml.etree.ElementTree as ET
+
+          files = subprocess.check_output([
+              "git", "ls-files", "-z", "--", "*.xml", "*.xml.dist", "*.svg"
+          ])
+          for path in files.split(b"\0"):
+              if path:
+                  ET.parse(os.fsdecode(path))
+          PY

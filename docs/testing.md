@@ -11,6 +11,27 @@ Tool references:
 - [PHPUnit](https://phpunit.de/) for unit tests.
 - [Rector](https://github.com/rectorphp/rector) for automated refactoring.
 
+## Worker lifecycle tests
+
+`phpunit.xml.dist` loads the package's internal-function mocks. The suite uses the real bridge lifecycle and a
+deterministic Yii response. It verifies request limits, HEAD body suppression, emission before after-send,
+successive requests, failed emission/conversion, and finalization once when after-send throws.
+
+These tests run under PHP CLI; they do not start FrankenPHP. To verify a deployment, use the
+[quick start](../README.md#quick-start) with the installed runtime and run the [migration checks](migration.md).
+Check native request reset, session isolation, upload reset, HEAD headers/body, partial-download bytes, and worker
+restarts. Record the runtime version and distinguish this evidence from mocked unit results.
+
+## Documentation checks
+
+Run the installed format tools over edited guides and skill files:
+
+```bash
+markdownlint-cli2 README.md UPGRADE.md AGENTS.md 'docs/*.md' 'skills/**/SKILL.md'
+prettier --check README.md UPGRADE.md AGENTS.md 'docs/*.md' 'skills/**/SKILL.md'
+editorconfig-checker
+```
+
 ## Automated refactoring (Rector)
 
 Run Rector to apply automated code refactoring.

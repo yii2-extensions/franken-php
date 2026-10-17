@@ -11,40 +11,31 @@ use Psr\Http\Message\{
     StreamFactoryInterface,
     UploadedFileFactoryInterface,
 };
+use Yii;
 use yii\caching\FileCache;
 use yii\helpers\ArrayHelper;
 use yii\log\FileTarget;
-use yii\web\{IdentityInterface, JsonParser};
+use yii\web\JsonParser;
+use yii2\extensions\frankenphp\tests\support\stub\WorkerApplication;
 use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
-use yii2\extensions\psrbridge\http\Application;
 
 use function dirname;
 
 /**
  * Base class for package integration tests.
  *
- * Provides a preconfigured {@see Application} instance with Yii components and PSR-7 factory bindings.
- *
- * @copyright Copyright (C) 2025 Terabytesoftw.
- * @license https://opensource.org/license/bsd-3-clause BSD 3-Clause License.
+ * Provides a preconfigured {@see WorkerApplication} instance with Yii components and PSR-7 factory bindings.
+ * Restores Yii error handlers after each test.
  */
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * Creates an integration-test application with default components and optional overrides.
      *
-     * @phpstan-param array{
-     *   id?: string,
-     *   basePath?: string,
-     *   components?: array<string, array<string, mixed>>,
-     *   container?: array{definitions?: array<string, mixed>},
-     *   runtimePath?: string,
-     *   vendorPath?: string
-     * } $config
-     * @phpstan-return Application<IdentityInterface>
+     * @param array<string, mixed> $config Application configuration overrides.
      */
-    protected function application(array $config = []): Application
+    protected function application(array $config = []): WorkerApplication
     {
         /** @phpstan-var array<string, mixed> $configApplication */
         $configApplication = ArrayHelper::merge(
@@ -105,6 +96,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             $config,
         );
 
-        return new Application($configApplication);
+        return new WorkerApplication($configApplication);
+    }
+
+    protected function tearDown(): void
+    {
+        if (Yii::$app !== null && Yii::$app->has('errorHandler', true)) {
+            Yii::$app->getErrorHandler()->unregister();
+        }
+
+        parent::tearDown();
     }
 }

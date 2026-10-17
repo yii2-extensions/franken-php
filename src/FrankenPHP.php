@@ -11,24 +11,14 @@ use yii2\extensions\psrbridge\creator\ServerRequestCreator;
 use yii2\extensions\psrbridge\emitter\SapiEmitter;
 use yii2\extensions\psrbridge\http\{Application, ServerExitCode};
 
+use function getenv;
 use function is_numeric;
 
 /**
  * Runs the FrankenPHP worker loop for a Yii PSR bridge application.
  *
- * Usage example:
- * ```php
- * $config = require __DIR__ . '/config/web.php';
- *
- * $runner = new \yii2\extensions\frankenphp\FrankenPHP(
- *     new \yii2\extensions\psrbridge\http\Application($config),
- * );
- *
- * $runner->run();
- * ```
- *
- * @copyright Copyright (C) 2025 Terabytesoftw.
- * @license https://opensource.org/license/bsd-3-clause BSD 3-Clause License.
+ * Creates a PSR request from SAPI globals, emits the response, and finalizes the bridge lifecycle once per request.
+ * HEAD responses omit the body. See the README quick start for the entry script and required factory bindings.
  */
 final class FrankenPHP
 {
@@ -42,7 +32,7 @@ final class FrankenPHP
      *
      * @param Application $app Application instance.
      * @param int|null $maxRequests Maximum number of requests to handle before stopping. If `null`, will try to read
-     * from MAX_REQUESTS env var, otherwise defaults to '1000'.
+     * from `$_ENV['MAX_REQUESTS']` or the process environment, otherwise defaults to '1000'.
      *
      * @phpstan-param Application<IdentityInterface> $app
      */
@@ -66,11 +56,17 @@ final class FrankenPHP
         $serverRequestCreator = Yii::$container->get(ServerRequestCreator::class);
 
         $handler = static function () use ($app, $emitter, $serverRequestCreator): void {
+            $emitted = false;
+
             try {
-                $response = $app->handle($serverRequestCreator->createFromGlobals());
-                $emitter->emit($response);
-            } catch (Throwable $e) {
-                throw $e;
+                $request = $serverRequestCreator->createFromGlobals();
+                $response = $app->handle($request);
+
+                $emitter->emit($response, $request->getMethod() !== 'HEAD');
+
+                $emitted = true;
+            } finally {
+                $app->finalize($emitted);
             }
         };
 
@@ -104,8 +100,10 @@ final class FrankenPHP
             return $this->maxRequests;
         }
 
-        if (isset($_ENV['MAX_REQUESTS']) && is_numeric($_ENV['MAX_REQUESTS'])) {
-            return (int) $_ENV['MAX_REQUESTS'];
+        $value = $_ENV['MAX_REQUESTS'] ?? getenv('MAX_REQUESTS');
+
+        if (is_numeric($value)) {
+            return (int) $value;
         }
 
         return self::DEFAULT_MAX_REQUESTS;

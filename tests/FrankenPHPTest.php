@@ -6,33 +6,33 @@ namespace yii2\extensions\frankenphp\tests;
 
 use Exception;
 use PHPUnit\Framework\Attributes\Group;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Yii;
+use yii\base\Event;
 use yii2\extensions\frankenphp\FrankenPHP;
 use yii2\extensions\frankenphp\tests\support\stub\HTTPFunctions;
 use yii2\extensions\frankenphp\tests\support\TestCase;
-use yii2\extensions\psrbridge\exception\HeadersAlreadySentException;
-use yii2\extensions\psrbridge\http\ServerExitCode;
+use yii2\extensions\psrbridge\exception\{HeadersAlreadySentException, Message};
+use yii2\extensions\psrbridge\http\{Response, ServerExitCode};
 
 use function array_fill;
+use function getenv;
+use function putenv;
 use function sprintf;
 
 use const PHP_INT_MAX;
 
 /**
  * Unit tests for the {@see FrankenPHP} worker runtime integration.
- *
- * Test coverage.
- * - Ensures `ignore_user_abort()` is enabled and called once per worker run.
- * - Ensures the worker resolves MAX_REQUESTS from constructor input, environment values, and defaults.
- * - Returns expected exit codes when the application is clean, the request limit is reached, or worker continuation
- *   stops.
- * - Throws exceptions when request processing fails or response headers are already sent.
- *
- * @copyright Copyright (C) 2025 Terabytesoftw.
- * @license https://opensource.org/license/bsd-3-clause BSD 3-Clause License.
  */
 #[Group('frankenphp')]
 final class FrankenPHPTest extends TestCase
 {
+    /**
+     * Process-level request limit restored after each test.
+     */
+    private string|false $previousProcessMaxRequests = false;
+
     public function testConstructorMaxRequestsOverridesEnvironmentAndDefault(): void
     {
         $_ENV['MAX_REQUESTS'] = '999';
@@ -152,6 +152,162 @@ final class FrankenPHPTest extends TestCase
         );
     }
 
+    public function testRunMethodCleansResponseLifecycleWhenEmitFails(): void
+    {
+        $afterSendEvents = [];
+
+        Event::on(
+            Response::class,
+            Response::EVENT_AFTER_SEND,
+            static function () use (&$afterSendEvents): void {
+                $afterSendEvents[] = 'afterSend';
+            },
+        );
+
+        HTTPFunctions::set_headers_sent(true, __FILE__, __LINE__);
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/site/index';
+        $_SERVER['HTTP_HOST'] = 'localhost';
+
+        $app = $this->application();
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        try {
+            $frankenPHP->run();
+
+            self::fail(
+                'Expected headers already sent exception.',
+            );
+        } catch (HeadersAlreadySentException) {
+            Event::trigger(Response::class, Response::EVENT_AFTER_SEND);
+
+            self::assertSame(
+                [],
+                $afterSendEvents,
+                'FrankenPHP should clean lifecycle handlers without firing after-send when emit fails.',
+            );
+            self::assertFalse(
+                $app->response->isSent,
+                'FrankenPHP should not mark the Yii response sent when PSR emission fails.',
+            );
+            self::assertSame(
+                [false],
+                $app->finalizations,
+                'Failed emission must finalize exactly once.',
+            );
+        }
+    }
+
+    public function testRunMethodCompletesResponseLifecycleAfterEmit(): void
+    {
+        $afterSendEvents = [];
+
+        Event::on(
+            Response::class,
+            Response::EVENT_AFTER_SEND,
+            static function () use (&$afterSendEvents): void {
+                $afterSendEvents[] = 'afterSend';
+            },
+        );
+
+        HTTPFunctions::setConsecutiveReturnValues([true]);
+
+        $app = $this->application();
+
+        $app->setMemoryLimit(1);
+
+        $frankenPHP = new FrankenPHP($app);
+
+        self::assertSame(
+            ServerExitCode::OK->value,
+            $frankenPHP->run(),
+            "FrankenPHP 'run()' method should return 'ServerExitCode::OK' when application is clean.",
+        );
+        self::assertSame(
+            ['afterSend'],
+            $afterSendEvents,
+            'FrankenPHP should complete Yii response lifecycle after emitting the PSR response.',
+        );
+    }
+
+    public function testRunMethodEmitsBodyBeforeAfterSend(): void
+    {
+        $this->expectOutputString('worker-response');
+
+        $outputAtAfterSend = '';
+
+        Event::on(
+            Response::class,
+            Response::EVENT_AFTER_SEND,
+            static function () use (&$outputAtAfterSend): void {
+                $outputAtAfterSend = ob_get_contents();
+            },
+        );
+
+        $app = $this->application();
+        $app->responseContent = 'worker-response';
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        (new FrankenPHP($app, 1))->run();
+
+        self::assertSame(
+            'worker-response',
+            $outputAtAfterSend,
+            'Emission must precede after-send.',
+        );
+        self::assertTrue(
+            $app->response->isSent,
+            'Successful emission must mark the Yii response sent.',
+        );
+        self::assertSame(
+            [true],
+            $app->finalizations,
+            'Successful emission must finalize exactly once.',
+        );
+    }
+
+    public function testRunMethodFinalizesSuccessiveRequests(): void
+    {
+        $this->expectOutputString('worker-responseworker-response');
+
+        $afterSendCount = 0;
+
+        $app = $this->application(
+            [
+                'on beforeRequest' => static function () use (&$afterSendCount): void {
+                    Event::on(
+                        Response::class,
+                        Response::EVENT_AFTER_SEND,
+                        static function () use (&$afterSendCount): void {
+                            $afterSendCount++;
+                        }
+                    );
+                },
+            ],
+        );
+        $app->responseContent = 'worker-response';
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        (new FrankenPHP($app, 2))->run();
+
+        self::assertSame(
+            2,
+            $afterSendCount,
+            'Each request must run its after-send handler once.',
+        );
+        self::assertSame(
+            [true, true],
+            $app->finalizations,
+            'Each request must finalize exactly once.',
+        );
+    }
+
     public function testRunMethodHandlesStringMaxRequestsCorrectly(): void
     {
         $_ENV['MAX_REQUESTS'] = ' 2 ';
@@ -264,6 +420,30 @@ final class FrankenPHPTest extends TestCase
         );
     }
 
+    public function testRunMethodReadsMaxRequestsFromProcessEnvironmentWhenEnvSuperglobalIsUnset(): void
+    {
+        $previous = getenv('MAX_REQUESTS');
+        putenv('MAX_REQUESTS=2');
+
+        try {
+            $app = $this->application();
+
+            $app->setMemoryLimit(PHP_INT_MAX);
+
+            self::assertSame(
+                ServerExitCode::REQUEST_LIMIT->value,
+                (new FrankenPHP($app))->run(),
+            );
+            self::assertSame(
+                2,
+                HTTPFunctions::getHandleRequestCallCount(),
+                'The process environment must supply the limit.',
+            );
+        } finally {
+            putenv($previous === false ? 'MAX_REQUESTS' : 'MAX_REQUESTS=' . $previous);
+        }
+    }
+
     public function testRunMethodReturnsOkWhenApplicationIsClean(): void
     {
         HTTPFunctions::setConsecutiveReturnValues([true]);
@@ -337,6 +517,30 @@ final class FrankenPHPTest extends TestCase
         );
     }
 
+    public function testRunMethodSuppressesHeadBody(): void
+    {
+        $_SERVER['REQUEST_METHOD'] = 'HEAD';
+
+        $this->expectOutputString('');
+
+        $app = $this->application();
+        $app->responseContent = 'head-body-must-not-escape';
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        (new FrankenPHP($app, 1))->run();
+
+        self::assertTrue(
+            $app->response->isSent,
+            'A HEAD response must complete the Yii send lifecycle.',
+        );
+        self::assertSame(
+            [true],
+            $app->finalizations,
+            'A HEAD response must finalize exactly once.',
+        );
+    }
+
     public function testRunMethodUsesDefaultMaxRequests(): void
     {
         $defaultMaxRequests = FrankenPHP::DEFAULT_MAX_REQUESTS;
@@ -369,6 +573,47 @@ final class FrankenPHPTest extends TestCase
         );
     }
 
+    public function testThrowExceptionWhenAfterSendFailsWithoutFinalizingAgain(): void
+    {
+        $this->expectOutputString('worker-response');
+
+        $exception = new Exception('After-send failed.');
+
+        Event::on(
+            Response::class,
+            Response::EVENT_AFTER_SEND,
+            static function () use ($exception): void {
+                throw $exception;
+            },
+        );
+
+        $app = $this->application();
+        $app->responseContent = 'worker-response';
+
+        $app->setMemoryLimit(PHP_INT_MAX);
+
+        try {
+            (new FrankenPHP($app, 1))->run();
+
+            self::fail(
+                'The after-send exception must propagate.',
+            );
+        } catch (Exception $actual) {
+            self::assertSame(
+                $exception,
+                $actual,
+                'The original after-send exception must propagate.',
+            );
+            self::assertSame(
+                [true],
+                $app->finalizations,
+                'After-send failure must not trigger a second finalization.',
+            );
+
+            Event::trigger(Response::class, Response::EVENT_AFTER_SEND);
+        }
+    }
+
     public function testThrowExceptionWhenHeadersAlreadySent(): void
     {
         // configure headers_sent mock to return true (headers already sent)
@@ -385,7 +630,9 @@ final class FrankenPHPTest extends TestCase
         $frankenPHP = new FrankenPHP($app);
 
         $this->expectException(HeadersAlreadySentException::class);
-        $this->expectExceptionMessage('Unable to emit response; headers already sent.');
+        $this->expectExceptionMessage(
+            Message::UNABLE_TO_EMIT_RESPONSE_HEADERS_ALREADY_SENT->getMessage(),
+        );
 
         $frankenPHP->run();
     }
@@ -401,16 +648,56 @@ final class FrankenPHPTest extends TestCase
         $frankenPHP = new FrankenPHP($app);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('An error occurred during request processing.');
+        $this->expectExceptionMessage(
+            'An error occurred during request processing.',
+        );
 
         $frankenPHP->run();
+    }
+
+    public function testThrowExceptionWhenResponseConversionFails(): void
+    {
+        $exception = new Exception('Response conversion failed.');
+        $app = $this->application();
+
+        Yii::$container->set(
+            ResponseFactoryInterface::class,
+            static function () use ($exception): never {
+                throw $exception;
+            }
+        );
+
+        try {
+            (new FrankenPHP($app, 1))->run();
+
+            self::fail(
+                'The response conversion exception must propagate.',
+            );
+        } catch (Exception $actual) {
+            self::assertSame(
+                $exception,
+                $actual,
+                'The original response conversion exception must propagate.',
+            );
+            self::assertSame(
+                [false],
+                $app->finalizations,
+                'Failed handling must finalize exactly once.',
+            );
+        }
     }
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->previousProcessMaxRequests = getenv('MAX_REQUESTS');
+
+        putenv('MAX_REQUESTS');
+
         HTTPFunctions::reset();
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
 
         // clear MAX_REQUESTS environment variable
         unset($_ENV['MAX_REQUESTS']);
@@ -418,6 +705,8 @@ final class FrankenPHPTest extends TestCase
 
     protected function tearDown(): void
     {
+        putenv($this->previousProcessMaxRequests === false ? 'MAX_REQUESTS' : 'MAX_REQUESTS=' . $this->previousProcessMaxRequests);
+
         parent::tearDown();
 
         HTTPFunctions::reset();
