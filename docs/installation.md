@@ -9,7 +9,7 @@ require a newer PHP version.
 Install the adapter and a PSR-7/PSR-17 implementation:
 
 ```bash
-composer require yii2-extensions/franken-php:^0.4@dev httpsoft/http-message
+composer require yii2-extensions/franken-php:^0.4 httpsoft/http-message
 ```
 
 Retain the resolved versions in the application's `composer.lock`. See [UPGRADE](../UPGRADE.md) when changing an

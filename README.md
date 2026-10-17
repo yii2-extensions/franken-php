@@ -43,7 +43,7 @@ Explore the ready-to-run Yii2 + FrankenPHP application template.
 ### Installation
 
 ```bash
-composer require yii2-extensions/franken-php:^0.4@dev httpsoft/http-message
+composer require yii2-extensions/franken-php:^0.4 httpsoft/http-message
 ```
 
 ### Quick start
