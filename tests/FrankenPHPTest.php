@@ -28,6 +28,11 @@ use const PHP_INT_MAX;
 #[Group('frankenphp')]
 final class FrankenPHPTest extends TestCase
 {
+    /**
+     * Process-level request limit restored after each test.
+     */
+    private string|false $previousProcessMaxRequests = false;
+
     public function testConstructorMaxRequestsOverridesEnvironmentAndDefault(): void
     {
         $_ENV['MAX_REQUESTS'] = '999';
@@ -686,6 +691,10 @@ final class FrankenPHPTest extends TestCase
     {
         parent::setUp();
 
+        $this->previousProcessMaxRequests = getenv('MAX_REQUESTS');
+
+        putenv('MAX_REQUESTS');
+
         HTTPFunctions::reset();
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
@@ -696,6 +705,8 @@ final class FrankenPHPTest extends TestCase
 
     protected function tearDown(): void
     {
+        putenv($this->previousProcessMaxRequests === false ? 'MAX_REQUESTS' : 'MAX_REQUESTS=' . $this->previousProcessMaxRequests);
+
         parent::tearDown();
 
         HTTPFunctions::reset();
