@@ -1,3 +1,8 @@
+# AI agents (if present)
+.codex
+.claude/*
+!.claude/skills/
+
 # codecoverage (if present)
 code_coverage
 
@@ -24,17 +29,20 @@ nbproject
 # node_modules (if present)
 node_modules
 package-lock.json
-
-# phpstorm project (if present)
-.idea
+!src/assets/package-lock.json
 
 # phpactor (if present)
 .phpactor.*
 
+# phpstorm project (if present)
+.idea
+
 # phpunit (if present)
 .phpunit.cache
 .phpunit.result.cache
-phpunit.xml*
+
+# private maintainer files (if present)
+/internal/
 
 # vagrant (if present)
 .vagrant
@@ -52,10 +60,3 @@ Thumbs.db
 .buildpath
 .project
 .settings
-
-# private maintenance and generated runtime data
-/internal/
-/examples/
-/runtime/
-/.agents/
-/.claude/

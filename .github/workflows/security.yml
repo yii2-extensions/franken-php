@@ -11,5 +11,9 @@ permissions:
 jobs:
   security:
     uses: yii2-framework/actions/.github/workflows/security.yml@f0e06ea5cc965cff4431177d448add7b7c98668b # v2.0.1
+    permissions:
+      contents: read
+    with:
+      gitleaks-config: .github/linters/.gitleaks.toml
     secrets:
       GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}

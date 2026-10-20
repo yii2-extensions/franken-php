@@ -19,7 +19,7 @@ current version section. Link PHPDoc to the README quick start instead of duplic
 reports, private tools, worker examples, and documentation decisions under ignored, export-excluded `internal/`.
 
 Run checks from `docs/testing.md`, including Markdownlint, Prettier, and EditorConfig on edited documentation.
-`composer ecs` and `composer rector` mutate files; use `vendor/bin/ecs check` to verify. Unit tests mock native HTTP
+`composer ecs` and `composer rector` mutate files; use `composer ecs-check` to verify. Unit tests mock native HTTP
 functions and cannot establish actual FrankenPHP compatibility. Report unavailable server tests. Do not install
 runtime binaries, change system settings, commit, or publish without authorization.
 

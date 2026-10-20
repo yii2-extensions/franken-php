@@ -1,13 +1,21 @@
 ---
-MD013: false
-MD033:
-  allowed_elements:
-    - p
-    - picture
-    - source
-    - img
-    - h1
-    - br
-    - a
-    - strong
-    - em
+config:
+  MD007:
+    indent: 2
+  MD013: false
+  MD033:
+    allowed_elements:
+      - p
+      - picture
+      - source
+      - img
+      - h1
+      - br
+      - a
+      - strong
+      - em
+ignores:
+  - vendor/**
+  - node_modules/**
+  - internal/**
+  - runtime/**
