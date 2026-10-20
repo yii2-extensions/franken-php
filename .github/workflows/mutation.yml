@@ -19,7 +19,7 @@ jobs:
   mutation:
     uses: yii2-framework/actions/.github/workflows/infection.yml@f0e06ea5cc965cff4431177d448add7b7c98668b # v2.0.1
     with:
-      command-options: --threads=2 --ignore-msi-with-no-mutations --min-msi=100 --min-covered-msi=100
+      command-options: --threads=max
       php-ini-values: date.timezone=UTC, memory_limit=-1
       php-version: '["8.3"]'
       phpstan: true

@@ -8,6 +8,9 @@ updates:
       interval: "daily"
     cooldown:
       default-days: 7
+    groups:
+      github-actions:
+        patterns: ["*"]
 
   # Maintain dependencies for Composer
   - package-ecosystem: "composer"
