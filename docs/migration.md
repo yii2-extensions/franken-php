@@ -33,3 +33,5 @@ For JSON from SAPI globals, check the PSR parsed body before relying on a Yii pa
 
 Run the application through FrankenPHP as well as the package's mocked unit suite. A passing unit suite does not
 verify the native request reset, streaming, TLS, or worker restart behavior.
+
+[Back to documentation](../README.md#documentation)

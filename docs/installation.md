@@ -49,9 +49,4 @@ frankenphp run --config Caddyfile
 For development watching, TLS, Docker, and optional X-Sendfile delivery, see the [README](../README.md) and the
 [FrankenPHP configuration reference](https://frankenphp.dev/docs/config/). Pin the runtime version in your deployment.
 
-## Next steps
-
-- [Configuration and lifecycle](configuration.md)
-- [Worker examples](examples.md)
-- [Migration checks](migration.md)
-- [Testing](testing.md)
+[Back to documentation](../README.md#documentation)

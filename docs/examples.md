@@ -54,3 +54,5 @@ client filenames as storage paths. Check `saveAs()` before reporting success.
 Keep file response streams open through emission. The bridge emitter reads bounded chunks. Check the returned bytes and `Content-Range`
 when using partial responses; after-send handlers may release resources after successful emission. See the bridge's
 [upload and download examples](https://github.com/yii2-extensions/psr-bridge/blob/main/docs/examples.md).
+
+[Back to documentation](../README.md#documentation)

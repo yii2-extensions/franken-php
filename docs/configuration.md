@@ -372,6 +372,4 @@ if (YII_ENV_DEV) {
 return $config;
 ```
 
-## Next steps
-
-- 🧪 [Testing Guide](testing.md)
+[Back to documentation](../README.md#documentation)

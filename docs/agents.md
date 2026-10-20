@@ -5,7 +5,24 @@ It guides factory binding, native worker setup, bridge finalization, and request
 
 ## Install in an application
 
-From the application root, list and install the skill from a package checkout or Composer installation:
+### Automatic Composer installation
+
+Complete the [one-time application setup](https://yii2-framework.github.io/docs/project/ai-agents/#composer-installation) to enable `llm/skills`
+and set `auto-sync` to `true` in `skills.json`. Approve `yii2-extensions/franken-php` explicitly in
+`dependencies.composer.trusted`.
+The installed package must include its skill bundle; its `extra.skills.source` declares the directory.
+
+```bash
+composer install
+composer skills:show
+```
+
+With `auto-sync` enabled, later dependency installs and updates synchronize the skill automatically; no per-skill
+installer is required. If `auto-sync` is `false`, run `composer skills:update` after dependency installation or updates.
+
+### Optional npx installation
+
+For the optional npx workflow, list the source before copying its skill:
 
 ```bash
 npx skills@1.7.2 add ./vendor/yii2-extensions/franken-php --list
@@ -38,3 +55,5 @@ source. This checkout's discovery links point to `skills/`; avoid duplicate inst
 - **Functional result:** run the [migration checks](migration.md) through FrankenPHP.
 
 Installer `--list` proves installer discovery only. It does not prove native client activation or runtime success.
+
+[Back to documentation](../README.md#documentation)
