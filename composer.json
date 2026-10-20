@@ -57,6 +57,9 @@
     "extra": {
         "branch-alias": {
             "dev-main": "0.5.x-dev"
+        },
+        "skills": {
+            "source": "skills"
         }
     },
     "scripts": {
@@ -69,7 +72,21 @@
         ],
         "rector": "./vendor/bin/rector process",
         "static": "./vendor/bin/phpstan --memory-limit=-1",
-        "tests": "./vendor/bin/phpunit"
+        "tests": "./vendor/bin/phpunit",
+        "ecs-check": "./vendor/bin/ecs check --ansi",
+        "quality": [
+            "actionlint",
+            "codespell --config .github/linters/.codespellrc --skip=./.git,./vendor/*,./node_modules/*,./internal/*,./.phpunit.cache/*,./code_coverage/*,./runtime/*",
+            "editorconfig-checker -config .github/linters/.editorconfig-checker.json",
+            "markdownlint-cli2 --config .github/linters/.markdown-lint.yml '**/*.md' '#vendor/**' '#node_modules/**' '#internal/**' '#runtime/**'",
+            "prettier --check --config .prettierrc.json --ignore-path .prettierignore '**/*.md' '**/*.{yml,yaml}' '!runtime/**' '!internal/**'",
+            "yamllint -d 'extends: default\nrules:\n  comments:\n    min-spaces-from-content: 1\n  line-length: disable\n  truthy: disable' .github"
+        ],
+        "zizmor": "zizmor --persona=pedantic .github",
+        "security": [
+            "@zizmor",
+            "gitleaks git --redact"
+        ]
     },
     "repositories": [
         {
