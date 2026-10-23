@@ -7,7 +7,7 @@
   `Application::finalize()`.
 - Remove custom finalization hooks and do not call Yii `Response::send()` in the worker; the runner finalizes once after
   emission. Keep response streams open until emission finishes.
-- HEAD requests no longer return a body; update tests that expected GET bytes.
+- HEAD requests no longer return a body; update tests that expected HEAD body bytes.
 
 See the [migration guide](docs/migration.md) for session isolation, uploads and the worker lifecycle.
 
