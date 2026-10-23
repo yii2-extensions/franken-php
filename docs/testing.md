@@ -73,9 +73,8 @@ Thresholds, thread count and memory options live in `infection.json5`. CI enforc
 
 ## Repository quality checks
 
-Make the CLI tools used by the shared quality workflow available on `PATH`:
-actionlint with its ShellCheck helper, codespell, EditorConfig Checker, markdownlint-cli2, Prettier and
-yamllint. Run all checks:
+Make the CLI tools used by the shared quality workflow available on `PATH`: actionlint with its ShellCheck helper,
+codespell, EditorConfig Checker, markdownlint-cli2, Prettier and yamllint. Run all checks:
 
 ```bash
 composer quality
@@ -113,8 +112,8 @@ composer tests
 
 ## Workflow security checks
 
-Make zizmor and Gitleaks available on `PATH`. Audit the current workflow files
-with the same pedantic persona used by the shared security workflow:
+Make zizmor and Gitleaks available on `PATH`. Audit the current workflow files with the same pedantic persona used by
+the shared security workflow:
 
 ```bash
 composer zizmor
@@ -126,22 +125,21 @@ Scan Git history for secrets with the repository's Gitleaks configuration:
 composer gitleaks
 ```
 
-Run both checks. Findings make the command fail; inspect them rather than
-disabling the checks.
+Run both checks. Findings make the command fail; inspect them rather than disabling the checks.
 
 ```bash
 composer security
 ```
 
-Zizmor needs GitHub API access for its online audits. If the tool runs offline,
-report that limit separately. To request an offline audit explicitly:
+Zizmor needs GitHub API access for its online audits. If the tool runs offline, report that limit separately. To request
+an offline audit explicitly:
 
 ```bash
 composer zizmor -- --offline
 ```
 
-Report hosted CI execution and its PHP/OS matrix separately from these local
-commands. Keep generated reports in ignored `internal/`.
+Report hosted CI execution and its PHP/OS matrix separately from these local commands. Keep generated reports in ignored
+`internal/`.
 
 ## Passing extra arguments
 
@@ -163,9 +161,9 @@ composer static -- --memory-limit=512M
 
 The `build` workflow runs PHPUnit on PHP 8.3, 8.4, and 8.5 on Ubuntu and Windows with the `intl`, `mbstring` and
 `sodium` extensions, once per supported Yii line: the `phpunit` job resolves Yii `22.0.x-dev` and the
-`phpunit-compatibility` job resolves Yii `2.0.55` (the minimum supported release). Both jobs change the requirement
-with `composer require yiisoft/yii2:<version>` before running the suite. The `mutation test` workflow runs Infection
-with PHPStan on PHP 8.3.
+`phpunit-compatibility` job resolves Yii `2.0.55` (the minimum supported release). Both jobs change the requirement with
+`composer require yiisoft/yii2:<version>` before running the suite. The `mutation test` workflow runs Infection with
+PHPStan on PHP 8.3.
 
 To repeat either resolution locally, use separate disposable checkouts so their dependencies and lock files cannot
 affect each other:
@@ -180,13 +178,13 @@ Repeat in the other checkout with `yiisoft/yii2:22.0.x-dev`.
 ## Worker lifecycle tests
 
 `phpunit.xml.dist` loads the package's internal-function mocks. The suite uses the real bridge lifecycle and a
-deterministic Yii response. It verifies request limits, HEAD body suppression, emission before after-send,
-successive requests, failed emission/conversion, and finalization once when after-send throws.
+deterministic Yii response. It verifies request limits, HEAD body suppression, emission before after-send, successive
+requests, failed emission/conversion, and finalization once when after-send throws.
 
 These tests run under PHP CLI; they do not start FrankenPHP. To verify a deployment, use the
-[quick start](../README.md#quick-start) with the installed runtime and run the [migration checks](migration.md).
-Check native request reset, session isolation, upload reset, HEAD headers/body, partial-download bytes, and worker
-restarts. Record the runtime version and distinguish this evidence from mocked unit results.
+[quick start](../README.md#quick-start) with the installed runtime and run the [migration checks](migration.md). Check
+native request reset, session isolation, upload reset, HEAD headers/body, partial-download bytes, and worker restarts.
+Record the runtime version and distinguish this evidence from mocked unit results.
 
 ## Documentation checks
 

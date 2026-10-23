@@ -1,8 +1,8 @@
 # Installation guide
 
 Use a [FrankenPHP worker runtime](https://frankenphp.dev/docs/worker/) with PHP 8.3+ and the `filter` and `mbstring`
-extensions. The adapter supports Yii `~2.0.55 || ^22.0@dev`. The selected framework and other dependencies may
-require a newer PHP version.
+extensions. The adapter supports Yii `~2.0.55 || ^22.0@dev`. The selected framework and other dependencies may require a
+newer PHP version.
 
 ## Install the packages
 
@@ -12,12 +12,12 @@ Install the adapter and a PSR-7/PSR-17 implementation:
 composer require yii2-extensions/franken-php:^0.4 httpsoft/http-message
 ```
 
-Retain the resolved versions in the application's `composer.lock`. See [UPGRADE](../UPGRADE.md) when changing an
-existing worker. The adapter has no frontend assets and requires no asset manager.
+Retain the resolved versions in the application's `composer.lock`. See the [upgrade guide](../UPGRADE.md) when changing
+an existing worker. The adapter has no frontend assets and requires no asset manager.
 
-HttpSoft supplies the factories in the [quick start](../README.md#quick-start). Another PSR-7/PSR-17
-implementation can be used by changing all four factory bindings. Composer installs the PHP adapter; obtain the
-server separately using the [official FrankenPHP installation instructions](https://frankenphp.dev/docs/).
+HttpSoft supplies the factories in the [quick start](../README.md#quick-start). Another PSR-7/PSR-17 implementation can
+be used by changing all four factory bindings. Composer installs the PHP adapter; obtain the server separately using the
+[official FrankenPHP installation instructions](https://frankenphp.dev/docs/).
 
 ## Configure the worker
 

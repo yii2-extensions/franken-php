@@ -51,8 +51,8 @@ composer require yii2-extensions/franken-php:^0.4 httpsoft/http-message
 
 ### Quick start
 
-Create `web/index.php` in an existing Yii application with its routes and secret `request.cookieValidationKey`
-already configured.
+Create `web/index.php` in an existing Yii application with its routes and secret `request.cookieValidationKey` already
+configured.
 
 ```php
 <?php
@@ -88,9 +88,9 @@ $runner = new FrankenPHP(new Application($config));
 $runner->run();
 ```
 
-The runner emits each PSR response and then completes the bridge's `finalize()` lifecycle exactly once. HEAD omits
-the response body. Keep request-scoped components out of `persistentComponents`; lazy sessions remain isolated
-when `useSession=false`. See [configuration](docs/configuration.md) and [worker examples](docs/examples.md).
+The runner emits each PSR response and then completes the bridge's `finalize()` lifecycle exactly once. HEAD omits the
+response body. Keep request-scoped components out of `persistentComponents`; lazy sessions remain isolated when
+`useSession=false`. See [configuration](docs/configuration.md) and [worker examples](docs/examples.md).
 
 ### FrankenPHP configuration
 
@@ -139,8 +139,11 @@ localhost {
 ```
 
 > [!WARNING]
-> **Note:** Using custom certificates (like `tls ./web/ssl/localhost.pem ./web/ssl/localhost-key.pem`) avoids browser trust warnings that occur with Caddy's automatic self-signed certificates.  
-> For local development, consider using [mkcert](https://github.com/FiloSottile/mkcert) to generate trusted local certificates.  
+>
+> **Note:** Using custom certificates (like `tls ./web/ssl/localhost.pem ./web/ssl/localhost-key.pem`) avoids browser
+> trust warnings that occur with Caddy's automatic self-signed certificates.  
+> For local development, consider using [mkcert](https://github.com/FiloSottile/mkcert) to generate trusted local
+> certificates.  
 > If you want to use Caddy's automatic self-signed certificates for local development, you can remove this line.
 
 For Yii, select the response header explicitly. The URI is relative to the interceptor's `private-files/` root:
@@ -154,8 +157,8 @@ response. Yii's default `X-Sendfile` response header is not matched by this inte
 
 ### Standalone Binary
 
-Install a worker-capable binary following the [official FrankenPHP instructions](https://frankenphp.dev/docs/),
-then run from the application root:
+Install a worker-capable binary following the [official FrankenPHP instructions](https://frankenphp.dev/docs/), then run
+from the application root:
 
 ```bash
 frankenphp run --config Caddyfile --watch
@@ -213,6 +216,7 @@ docker run \
 <!-- editorconfig-checker-enable -->
 
 > [!IMPORTANT]
+>
 > Your application will be available at `https://localhost:8443` or at the address set in the `Caddyfile`.
 
 ### Development & Debugging
@@ -245,14 +249,13 @@ if (YII_ENV_DEV) {
 
 ### File Upload Handling
 
-Use `yii2\extensions\psrbridge\http\UploadedFile` in the application's upload model. Validate file content and size,
-use a server-generated storage name, and check `saveAs()` before reporting success. See
+Use `yii2\extensions\psrbridge\http\UploadedFile` in the application's upload model. Validate file content and size, use
+a server-generated storage name, and check `saveAs()` before reporting success. See
 [uploads and streaming downloads](docs/examples.md#uploads-and-streaming-downloads).
 
 ## Documentation
 
-Practical guides and complete worker examples for FrankenPHP and request
-isolation.
+Practical guides and complete worker examples for FrankenPHP and request isolation.
 
 - 📚 [Installation Guide](docs/installation.md)
 - ⚙️ [Configuration Guide](docs/configuration.md)
@@ -260,19 +263,23 @@ isolation.
 - 🔄 [Upgrade Guide](UPGRADE.md) and [Migration Checks](docs/migration.md)
 - 🧪 [Testing Guide](docs/testing.md)
 
+The guides and the [API reference](https://yii2-framework.github.io/docs/extensions/franken-php/reference/) generated
+from the PHPDoc in `src/` are published at <https://yii2-framework.github.io/docs/extensions/franken-php/>.
+
 ## AI assistance
 
-AI agents: use the repository guides and source for the installed revision.
-For a [documentation deployment](https://yii2-framework.github.io/docs/) with
-`llms.txt`, read that index first. When Markdown export is enabled, append
-`index.md` to a page URL. For Yii conventions, install the `yii2-framework`
-skill from [`yii2-extensions/skill`](https://github.com/yii2-extensions/skill)
-through the [shared Composer setup](https://yii2-framework.github.io/docs/project/ai-agents/#composer-installation).
+AI agents: read the [documentation index](https://yii2-framework.github.io/docs/llms.txt) and fetch the Markdown version
+of a page by appending `index.md` to its URL. The
+[AI agents guide](https://yii2-framework.github.io/docs/project/ai-agents/) covers skill installation, client setup and
+verification.
 
-- 🤖 [yii2-frankenphp-worker skill](docs/agents.md): factories and isolation.
+- 🤖 [`yii2-frankenphp-worker` skill](docs/agents.md): FrankenPHP worker.
+- 🧭 [`yii2-framework` skill](https://yii2-framework.github.io/docs/guide/skills/yii2-framework/): Yii 22.0 application
+  conventions.
 
-If the hosted sources are unavailable, use the repository guides and locally
-available skills.
+The hosted documentation covers Yii 22.0. If it does not match the installed revision or is unavailable, use the
+[repository guides](#documentation), the [skill source](skills/yii2-frankenphp-worker/SKILL.md), the source PHPDoc and
+the [changelog](CHANGELOG.md).
 
 ## Package information
 

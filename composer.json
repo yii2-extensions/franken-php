@@ -2,6 +2,7 @@
     "name": "yii2-extensions/franken-php",
     "type": "library",
     "description": "Supercharge your Yii2 applications with FrankenPHP blazing-fast HTTP server.",
+    "homepage": "https://yii2-framework.github.io/docs/extensions/franken-php/",
     "keywords": [
         "yii2-extension",
         "frankenphp",
@@ -12,6 +13,11 @@
         "performance"
     ],
     "license": "BSD-3-Clause",
+    "support": {
+        "docs": "https://yii2-framework.github.io/docs/extensions/franken-php/",
+        "issues": "https://github.com/yii2-extensions/franken-php/issues",
+        "source": "https://github.com/yii2-extensions/franken-php"
+    },
     "authors": [
         {
             "name": "Wilmer Arambula",
