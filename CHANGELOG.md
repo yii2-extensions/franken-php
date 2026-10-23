@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4.1 Under development
+## 0.4.1 October 23, 2026
 
 - ci: update markdown linting configuration and remove obsolete files.
 - docs/ci: declare skill source and auto-sync trusted skills via Composer; pin workflows to `yii2-framework/actions` `v2.0.1` release commit.
