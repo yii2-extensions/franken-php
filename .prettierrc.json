@@ -6,7 +6,7 @@
     "printWidth": 80,
     "overrides": [
         {
-            "files": ["**/*.{yml,yaml}"],
+            "files": ["**/*.{cjs,css,js,mjs,yml,yaml}"],
             "options": {
                 "tabWidth": 2
             }
@@ -15,7 +15,15 @@
             "files": "**/*.md",
             "options": {
                 "embeddedLanguageFormatting": "off",
+                "printWidth": 120,
+                "proseWrap": "always",
                 "tabWidth": 2
+            }
+        },
+        {
+            "files": "CHANGELOG.md",
+            "options": {
+                "proseWrap": "preserve"
             }
         }
     ]
