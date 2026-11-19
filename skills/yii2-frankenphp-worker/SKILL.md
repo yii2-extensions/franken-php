@@ -65,8 +65,9 @@ These look like bugs and are package contracts; do not "fix" them in the runner 
 - After each request, `run()` checks `clean()` before the request limit. The memory threshold returns
   `ServerExitCode::OK` (`0`), even with requests left. The request limit and a `false` result from
   `frankenphp_handle_request()` both return `ServerExitCode::REQUEST_LIMIT` (`1`); the runner never returns `SHUTDOWN`.
-- A non-positive request limit handles one request and returns `REQUEST_LIMIT`; it does not mean unlimited. A nonnumeric
-  `$_ENV['MAX_REQUESTS']` selects 1000 without reading `getenv()`; only an absent entry falls back to it.
+- A non-positive request limit handles one request and does not mean unlimited. It returns `REQUEST_LIMIT` when
+  `clean()` returns `false`, and `OK` when the memory threshold is already reached. A nonnumeric `$_ENV['MAX_REQUESTS']`
+  selects 1000 without reading `getenv()`; only an absent entry falls back to it.
 - A HEAD request emits no body, but emission counts as successful: `finalize(true)` runs and after-send handlers fire.
 - The request handler catches nothing. An emission failure, such as `OutputAlreadySentException` when an output buffer
   already holds bytes, finalizes with `false`, skips after-send and propagates. An after-send failure propagates after
