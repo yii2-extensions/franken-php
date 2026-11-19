@@ -1,44 +1,52 @@
-# Autodetect text files
+# autodetect text files
 * text=auto eol=lf
 
-# ...Unless the name matches the following overriding patterns
+# ...unless the name matches the following overriding patterns
 
-# Definitively text files
-*.php   text
+# definitively text files
+*.bat   text
 *.css   text
 *.js    text
-*.txt   text
-*.md    text
-*.xml   text
 *.json  text
 *.json5 text
+*.md    text
 *.neon  text
-*.bat   text
+*.php   text
 *.sql   text
+*.txt   text
+*.xml   text
 *.yml   text
 *.yaml  text
 *.svg   text
 
-# Ensure those won't be messed up with
-*.png   binary
-*.jpg   binary
-*.gif   binary
-*.ttf   binary
+# ensure those won't be messed up with
+*.png  binary
+*.jpg  binary
+*.gif  binary
+*.ttf  binary
 
-# Exclude files from the archive
-/.agents                        export-ignore
-/.claude                        export-ignore
+# exclude files from the archive
+.agents                         export-ignore
+.claude                         export-ignore
+.env                            export-ignore
+.env.*                          export-ignore
+.env.example                    export-ignore
+/.codex                         export-ignore
+/.config                        export-ignore
 /.editorconfig                  export-ignore
 /.gitattributes                 export-ignore
 /.github                        export-ignore
 /.gitignore                     export-ignore
+/.phpunit.cache                 export-ignore
 /.prettierignore                export-ignore
 /.prettierrc.json               export-ignore
 /.styleci.yml                   export-ignore
-/AGENTS.md                      export-ignore
+/.vscode                        export-ignore
+/artifacts                      export-ignore
+/code_coverage                  export-ignore
 /codeception.yml                export-ignore
-/codecov.yml                    export-ignore
 /composer-require-checker.json  export-ignore
+/composer.lock                  export-ignore
 /docs                           export-ignore
 /ecs.php                        export-ignore
 /infection.json*                export-ignore
@@ -48,7 +56,8 @@
 /rector.php                     export-ignore
 /runtime                        export-ignore
 /tests                          export-ignore
+/vendor                         export-ignore
 
-# Avoid merge conflicts in CHANGELOG
+# avoid merge conflicts in CHANGELOG
 # https://about.gitlab.com/2015/02/10/gitlab-reduced-merge-conflicts-by-90-percent-with-changelog-placeholders/
 /CHANGELOG.md merge=union
