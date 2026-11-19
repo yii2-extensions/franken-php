@@ -1,6 +1,6 @@
 ---
 name: yii2-frankenphp-worker
-description: Configure yii2-extensions/franken-php workers in Yii applications, including PSR factory bindings, bridge finalization, HEAD responses, request isolation, and worker recycling.
+description: Configure yii2-extensions/franken-php workers in Yii applications, including PSR factory bindings, bridge finalization, HEAD responses, request limits, exit codes, request isolation, and worker recycling. Not for RoadRunner or other runtimes, Yii applications served without the PSR bridge, Caddy or FrankenPHP server tuning beyond running the entry script in worker mode, or changes to this package's own source.
 license: BSD-3-Clause
 ---
 
@@ -57,6 +57,22 @@ The request limit is the constructor argument, then `$_ENV['MAX_REQUESTS']` or `
 entry is absent. Missing or nonnumeric values default to 1000. It is resolved before the loop. Non-positive limits still
 stop after one request. `clean()` checks 90% of the configured memory threshold; it does not reset application-specific
 static state.
+
+## Intended behavior
+
+These look like bugs and are package contracts; do not "fix" them in the runner or the application:
+
+- After each request, `run()` checks `clean()` before the request limit. The memory threshold returns
+  `ServerExitCode::OK` (`0`), even with requests left. The request limit and a `false` result from
+  `frankenphp_handle_request()` both return `ServerExitCode::REQUEST_LIMIT` (`1`); the runner never returns `SHUTDOWN`.
+- A non-positive request limit handles one request and returns `REQUEST_LIMIT`; it does not mean unlimited. A nonnumeric
+  `$_ENV['MAX_REQUESTS']` selects 1000 without reading `getenv()`; only an absent entry falls back to it.
+- A HEAD request emits no body, but emission counts as successful: `finalize(true)` runs and after-send handlers fire.
+- The request handler catches nothing. An emission failure, such as `OutputAlreadySentException` when an output buffer
+  already holds bytes, finalizes with `false`, skips after-send and propagates. An after-send failure propagates after
+  the single `finalize(true)`. Action exceptions do not reach the runner: the bridge's `handle()` renders them as error
+  responses.
+- `run()` calls `ignore_user_abort(true)` so an interrupted client connection does not terminate the worker script.
 
 ## Verify the integration
 

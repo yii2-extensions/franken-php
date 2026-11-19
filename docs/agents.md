@@ -57,4 +57,33 @@ source. This checkout's discovery links point to `skills/`; avoid duplicate inst
 
 Installer `--list` proves installer discovery only. It does not prove native client activation or runtime success.
 
+## Example prompts
+
+Start a fresh client session at the application root. The explicit example uses Codex's `$skill-name` notation; use
+`/yii2-frankenphp-worker` in Claude Code or the installed client's native skill mechanism. Do not paste the skill body
+and count that as native activation. These are tasks to execute and verify, not claims that an evaluation has passed.
+
+### Explicit invocation
+
+```text
+$yii2-frankenphp-worker
+Review a FrankenPHP worker entry point using the installed PSR Bridge. Show factory bindings and exactly one
+finalization after emission, with correct GET/HEAD handling and no request-sensitive persistent components.
+Inspect the installed revision first. Do not install dependencies or change files without authorization.
+```
+
+### Natural selection
+
+```text
+Two visitors share a long-lived FrankenPHP worker. How can I verify that a missing session cookie or second request
+without an upload does not inherit the previous visitor state?
+```
+
+### Verify the outcome
+
+Check finalization count and request isolation with fixtures, then distinguish those results from an actual FrankenPHP
+server run. Record native loading evidence separately from configuration review, executable checks and browser/runtime
+results. For a negative selection control, ask an unrelated question in a fresh session and confirm this package skill
+is not loaded. Keep evaluation traces private; report unavailable checks rather than treating discovery as execution.
+
 [Back to documentation](../README.md#documentation)

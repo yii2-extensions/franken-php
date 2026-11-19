@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   phpunit:
-    uses: yii2-framework/actions/.github/workflows/phpunit.yml@f0e06ea5cc965cff4431177d448add7b7c98668b # v2.0.1
+    uses: yii2-framework/actions/.github/workflows/phpunit.yml@7a2d60325d59c5c9377fd445c912f2f1bfacf9d9 # v2.0.2
     with:
       composer-command: require yiisoft/yii2:22.0.x-dev
       concurrency-group: phpunit-${{ github.workflow }}-${{ github.ref }}
@@ -27,7 +27,7 @@ jobs:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   phpunit-compatibility:
-    uses: yii2-framework/actions/.github/workflows/phpunit.yml@f0e06ea5cc965cff4431177d448add7b7c98668b # v2.0.1
+    uses: yii2-framework/actions/.github/workflows/phpunit.yml@7a2d60325d59c5c9377fd445c912f2f1bfacf9d9 # v2.0.2
     with:
       composer-command: require yiisoft/yii2:2.0.55
       concurrency-group: phpunit-compatibility-${{ github.workflow }}-${{ github.ref }}

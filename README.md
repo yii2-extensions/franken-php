@@ -14,14 +14,14 @@
     <a href="https://github.com/yii2-extensions/franken-php/actions/workflows/build.yml" target="_blank">
         <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/franken-php/build.yml?style=for-the-badge&label=PHPUnit&logo=github" alt="PHPUnit">
     </a>
+    <a href="https://codecov.io/github/yii2-extensions/franken-php" target="_blank">
+        <img src="https://img.shields.io/codecov/c/github/yii2-extensions/franken-php.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage" alt="Coverage">
+    </a>
     <a href="https://dashboard.stryker-mutator.io/reports/github.com/yii2-extensions/franken-php/main" target="_blank">
         <img src="https://img.shields.io/endpoint?style=for-the-badge&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyii2-extensions%2Ffranken-php%2Fmain" alt="Mutation Testing">
     </a>
     <a href="https://github.com/yii2-extensions/franken-php/actions/workflows/static.yml" target="_blank">
         <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/franken-php/static.yml?style=for-the-badge&label=PHPStan&logo=github" alt="PHPStan">
-    </a>
-    <a href="https://github.com/yii2-extensions/franken-php/actions/workflows/security.yml" target="_blank">
-        <img src="https://img.shields.io/github/actions/workflow/status/yii2-extensions/franken-php/security.yml?style=for-the-badge&label=Security&logo=github" alt="Security">
     </a>
 </p>
 
@@ -33,8 +33,8 @@
 ## Features
 
 <picture>
-    <source media="(min-width: 768px)" srcset="./docs/svgs/features.svg">
-    <img src="./docs/svgs/features-mobile.svg" alt="Feature Overview" style="width: 100%;">
+    <source media="(min-width: 768px)" srcset="https://raw.githubusercontent.com/yii2-extensions/franken-php/main/docs/svgs/features.svg">
+    <img src="https://raw.githubusercontent.com/yii2-extensions/franken-php/main/docs/svgs/features-mobile.svg" alt="Feature Overview" style="width: 100%;">
 </picture>
 
 ## Demo
@@ -90,7 +90,8 @@ $runner->run();
 
 The runner emits each PSR response and then completes the bridge's `finalize()` lifecycle exactly once. HEAD omits the
 response body. Keep request-scoped components out of `persistentComponents`; lazy sessions remain isolated when
-`useSession=false`. See [configuration](docs/configuration.md) and [worker examples](docs/examples.md).
+`useSession=false`. See [configuration](https://github.com/yii2-extensions/franken-php/blob/main/docs/configuration.md)
+and [worker examples](https://github.com/yii2-extensions/franken-php/blob/main/docs/examples.md).
 
 ### FrankenPHP configuration
 
@@ -251,17 +252,18 @@ if (YII_ENV_DEV) {
 
 Use `yii2\extensions\psrbridge\http\UploadedFile` in the application's upload model. Validate file content and size, use
 a server-generated storage name, and check `saveAs()` before reporting success. See
-[uploads and streaming downloads](docs/examples.md#uploads-and-streaming-downloads).
+[uploads and streaming downloads](https://github.com/yii2-extensions/franken-php/blob/main/docs/examples.md#uploads-and-streaming-downloads).
 
 ## Documentation
 
 Practical guides and complete worker examples for FrankenPHP and request isolation.
 
-- 📚 [Installation Guide](docs/installation.md)
-- ⚙️ [Configuration Guide](docs/configuration.md)
-- 💡 [Worker Examples](docs/examples.md)
-- 🔄 [Upgrade Guide](UPGRADE.md) and [Migration Checks](docs/migration.md)
-- 🧪 [Testing Guide](docs/testing.md)
+- 📚 [Installation Guide](https://github.com/yii2-extensions/franken-php/blob/main/docs/installation.md)
+- ⚙️ [Configuration Guide](https://github.com/yii2-extensions/franken-php/blob/main/docs/configuration.md)
+- 💡 [Worker Examples](https://github.com/yii2-extensions/franken-php/blob/main/docs/examples.md)
+- 🔄 [Upgrade Guide](UPGRADE.md) and
+  [Migration Checks](https://github.com/yii2-extensions/franken-php/blob/main/docs/migration.md)
+- 🧪 [Testing Guide](https://github.com/yii2-extensions/franken-php/blob/main/docs/testing.md)
 
 The guides and the [API reference](https://yii2-framework.github.io/docs/extensions/franken-php/reference/) generated
 from the PHPDoc in `src/` are published at <https://yii2-framework.github.io/docs/extensions/franken-php/>.
@@ -273,7 +275,9 @@ of a page by appending `index.md` to its URL. The
 [AI agents guide](https://yii2-framework.github.io/docs/project/ai-agents/) covers skill installation, client setup and
 verification.
 
-- 🤖 [`yii2-frankenphp-worker` skill](docs/agents.md): FrankenPHP worker.
+- 🤖 [`yii2-frankenphp-worker` skill](https://github.com/yii2-extensions/franken-php/blob/main/docs/agents.md):
+  FrankenPHP worker entry point and PSR factory bindings, the `handle()`, emission and `finalize()` lifecycle, HEAD
+  responses, request limits, memory recycling and request isolation.
 - 🧭 [`yii2-framework` skill](https://yii2-framework.github.io/docs/guide/skills/yii2-framework/): Yii 22.0 application
   conventions.
 
@@ -291,10 +295,20 @@ the [changelog](CHANGELOG.md).
 
 ## Project status
 
-[![Codecov](https://img.shields.io/codecov/c/github/yii2-extensions/franken-php.svg?style=for-the-badge&logo=codecov&logoColor=white&label=Coverage)](https://codecov.io/github/yii2-extensions/franken-php)
 [![PHPStan Level Max](https://img.shields.io/badge/PHPStan-Level%20Max-4F5D95.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yii2-extensions/franken-php/actions/workflows/static.yml)
 [![Quality](https://img.shields.io/github/actions/workflow/status/yii2-extensions/franken-php/quality.yml?style=for-the-badge&label=Quality&logo=github)](https://github.com/yii2-extensions/franken-php/actions/workflows/quality.yml)
-[![StyleCI](https://img.shields.io/badge/StyleCI-Passed-44CC11.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.styleci.io/repos/1031393416?branch=main)
+[![StyleCI](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fgithub.styleci.io%2Frepos%2F1031393416%2Fshield%3Fbranch%3Dmain&query=%2F%2F*%5Blocal-name%28%29%3D%27text%27%5D%5B2%5D&label=StyleCI&style=for-the-badge&logo=github&logoColor=white&color=4F5D95)](https://github.styleci.io/repos/1031393416?branch=main)
+
+## Security
+
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/yii2-extensions/franken-php/badge?style=for-the-badge)](https://scorecard.dev/viewer/?uri=github.com/yii2-extensions/franken-php)
+[![Zizmor](https://img.shields.io/github/actions/workflow/status/yii2-extensions/franken-php/security.yml?style=for-the-badge&label=Zizmor&logo=github)](https://github.com/yii2-extensions/franken-php/actions/workflows/security.yml)
+
+## Built with AI
+
+[![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757.svg?style=for-the-badge&logo=claude&logoColor=white)](https://claude.com/claude-code)
+[![Built with Codex](https://img.shields.io/badge/Built%20with-Codex-10A37F.svg?style=for-the-badge&logo=openaigym&logoColor=white)](https://openai.com/codex)
+[![Reviewed by CodeRabbit](https://img.shields.io/badge/Reviewed%20by-CodeRabbit-FF570A.svg?style=for-the-badge&logo=coderabbit&logoColor=white)](https://www.coderabbit.ai)
 
 ## Our social networks
 

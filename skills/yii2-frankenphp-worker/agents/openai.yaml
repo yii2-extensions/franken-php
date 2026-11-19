@@ -1,0 +1,4 @@
+interface:
+  display_name: "Yii2 FrankenPHP Worker"
+  short_description: "Run Yii PSR Bridge apps in FrankenPHP workers"
+  default_prompt: "Use $yii2-frankenphp-worker to configure a yii2-extensions/franken-php worker in a Yii application."
