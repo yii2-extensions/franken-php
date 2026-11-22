@@ -17,21 +17,23 @@ permissions:
 
 jobs:
   phpunit:
-    uses: yii2-framework/actions/.github/workflows/phpunit.yml@7a2d60325d59c5c9377fd445c912f2f1bfacf9d9 # v2.0.2
+    uses: yii2-framework/actions/.github/workflows/phpunit.yml@e3e99bd1c54fb350911bf446690e6146acf7660d # v2.0.6
     with:
       composer-command: require yiisoft/yii2:22.0.x-dev
       concurrency-group: phpunit-${{ github.workflow }}-${{ github.ref }}
       extensions: intl, mbstring, sodium
-      php-version: '["8.3","8.4","8.5"]'
+      ignore-platform-reqs-php-version: "[8.6]"
+      php-version: "[8.3, 8.4, 8.5, 8.6]"
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   phpunit-compatibility:
-    uses: yii2-framework/actions/.github/workflows/phpunit.yml@7a2d60325d59c5c9377fd445c912f2f1bfacf9d9 # v2.0.2
+    uses: yii2-framework/actions/.github/workflows/phpunit.yml@e3e99bd1c54fb350911bf446690e6146acf7660d # v2.0.6
     with:
       composer-command: require yiisoft/yii2:2.0.55
       concurrency-group: phpunit-compatibility-${{ github.workflow }}-${{ github.ref }}
       extensions: intl, mbstring, sodium
-      php-version: '["8.3","8.4","8.5"]'
+      ignore-platform-reqs-php-version: "[8.6]"
+      php-version: "[8.3, 8.4, 8.5, 8.6]"
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
