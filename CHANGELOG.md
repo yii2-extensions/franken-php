@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.4.2 Under development
 
 - docs: align `README.md` badges and Security section with the standard, add skill prompts, contracts and Codex metadata, and add Scorecard.
-- ci: update shared workflows to `v2.0.6` and add PHP `8.6` to both PHPUnit matrices.
+- ci: update shared workflows to `v2.0.6` and add PHP `8.6`.
 
 ## 0.4.1 October 23, 2026
 
