@@ -159,11 +159,11 @@ composer static -- --memory-limit=512M
 
 ## CI matrix and Yii resolution
 
-The `build` workflow runs PHPUnit on PHP 8.3, 8.4, and 8.5 on Ubuntu and Windows with the `intl`, `mbstring` and
+The `build` workflow runs PHPUnit on PHP 8.3, 8.4, 8.5 and 8.6 on Ubuntu and Windows with the `intl`, `mbstring` and
 `sodium` extensions, once per supported Yii line: the `phpunit` job resolves Yii `22.0.x-dev` and the
 `phpunit-compatibility` job resolves Yii `2.0.55` (the minimum supported release). Both jobs change the requirement with
-`composer require yiisoft/yii2:<version>` before running the suite. The `mutation test` workflow runs Infection with
-PHPStan on PHP 8.3.
+`composer require yiisoft/yii2:<version>` before running the suite. CI passes `--ignore-platform-reqs` to Composer only
+on PHP 8.6. The `mutation test` workflow still runs Infection with PHPStan on PHP 8.3.
 
 To repeat either resolution locally, use separate disposable checkouts so their dependencies and lock files cannot
 affect each other:
